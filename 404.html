@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#5B0070">
+<title>Stranica nije pronađena — Optika Visage</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/x-icon" href="/favicons/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Rethink+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+<style>
+  .err-wrap {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 1.5rem;
+  }
+  .err-content { max-width: 560px; }
+  .err-code {
+    font-family: var(--font-display);
+    font-size: clamp(6rem, 18vw, 12rem);
+    line-height: 1;
+    color: var(--primary);
+    font-weight: 300;
+    letter-spacing: -0.04em;
+    font-style: italic;
+  }
+  .err-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 400;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.15;
+  }
+  .err-lede {
+    color: var(--ink-soft);
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+  }
+  .err-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="/" class="nav-logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 15 Q 15 3, 30 15 Q 45 27, 55 15 Q 45 3, 30 15 Q 15 27, 5 15 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="30" cy="15" r="4.5" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="logo-text"><strong>VISAGE</strong>OPTIKA</span>
+    </a>
+  </div>
+</header>
+
+<main class="err-wrap">
+  <div class="err-content">
+    <div class="err-code">404</div>
+    <h1 class="err-title">Stranica koju tražite <em style="color:var(--primary); font-style: italic;">ne postoji.</em></h1>
+    <p class="err-lede">Moguće je da je premeštena ili da je link pogrešan. Vratite se na početnu ili nas pozovite.</p>
+    <div class="err-actions">
+      <a href="/" class="btn btn-primary">Početna</a>
+      <a href="tel:+381603175264" class="btn btn-ghost">060 3175264</a>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>
