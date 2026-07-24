@@ -6,6 +6,25 @@
 (function () {
   'use strict';
 
+  // ---------- GA4 contact click tracking (tel:/viber:/mailto:) ----------
+  document.querySelectorAll('a[href^="tel:"]').forEach(function (link) {
+    link.addEventListener('click', function () {
+      gtag('event', 'contact_click', { method: 'phone' });
+    });
+  });
+
+  document.querySelectorAll('a[href^="viber://"]').forEach(function (link) {
+    link.addEventListener('click', function () {
+      gtag('event', 'contact_click', { method: 'viber' });
+    });
+  });
+
+  document.querySelectorAll('a[href^="mailto:"]').forEach(function (link) {
+    link.addEventListener('click', function () {
+      gtag('event', 'contact_click', { method: 'email' });
+    });
+  });
+
   // ---------- Mobile menu toggle ----------
   const toggle = document.querySelector('.nav-toggle');
   const menu = document.querySelector('.nav-menu');
