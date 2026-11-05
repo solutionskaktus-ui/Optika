@@ -199,6 +199,136 @@
     });
   }
 
+  // ---------- Korpa ----------
+  // Korpa se čuva u pregledaču posetioca (localStorage). Porudžbina se šalje preko FormSubmit-a
+  // na email iz data-endpoint na formi (/korpa/).
+  var KEY = 'visage-korpa';
+  var readCart = function () {
+    try { var v = JSON.parse(localStorage.getItem(KEY) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; }
+  };
+  var writeCart = function (items) {
+    try { localStorage.setItem(KEY, JSON.stringify(items)); } catch (e) { /* privatni prozor: korpa radi do zatvaranja stranice */ }
+    memCart = items;
+    updateBadge();
+  };
+  var memCart = readCart();
+  var cartItems = function () { var v = readCart(); return v.length || !memCart.length ? v : memCart; };
+  var rsd = function (n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' RSD'; };
+  var updateBadge = function () {
+    var n = cartItems().length;
+    document.querySelectorAll('.nav-cart').forEach(function (el) {
+      el.hidden = n === 0;
+      var c = el.querySelector('.nav-cart-n'); if (c) c.textContent = String(n);
+      el.setAttribute('aria-label', 'Korpa, ' + n + (n === 1 ? ' okvir' : ' okvira'));
+    });
+  };
+  updateBadge();
+
+  document.querySelectorAll('.buy').forEach(function (box) {
+    var btn = box.querySelector('.buy-add');
+    var done = box.querySelector('.buy-done');
+    btn.addEventListener('click', function () {
+      var items = cartItems();
+      items.push({
+        id: Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+        slug: box.getAttribute('data-slug'), ime: box.getAttribute('data-ime'),
+        cena: parseInt(box.getAttribute('data-cena'), 10) || 0, slika: box.getAttribute('data-slika'),
+        url: location.pathname, staklo: box.querySelector('.buy-staklo').value
+      });
+      writeCart(items);
+      done.hidden = false;
+      btn.textContent = 'Dodaj još jedan';
+      if (typeof window.gtag === 'function') window.gtag('event', 'add_to_cart', { item_name: box.getAttribute('data-ime') });
+    });
+  });
+
+  var order = document.getElementById('order');
+  if (order) {
+    var list = document.getElementById('cart-list');
+    var tpl = document.getElementById('cart-item');
+    var empty = document.getElementById('cart-empty');
+    var done = document.getElementById('order-done');
+    var err = document.getElementById('order-error');
+    var rx = document.getElementById('rx');
+    var render = function () {
+      var items = cartItems();
+      list.innerHTML = '';
+      order.hidden = items.length === 0;
+      empty.hidden = items.length !== 0;
+      var total = 0;
+      items.forEach(function (it) {
+        total += it.cena || 0;
+        var li = tpl.content.firstElementChild.cloneNode(true);
+        li.querySelector('.cart-img').src = it.slika;
+        var a = li.querySelector('.cart-name'); a.textContent = it.ime; a.href = it.url;
+        li.querySelector('.cart-price').textContent = it.cena ? rsd(it.cena) : 'Cena na upit';
+        var sel = li.querySelector('.cart-staklo'); sel.value = it.staklo;
+        sel.addEventListener('change', function () {
+          var all = cartItems(); all.forEach(function (x) { if (x.id === it.id) x.staklo = sel.value; }); writeCart(all);
+        });
+        li.querySelector('.cart-remove').addEventListener('click', function () {
+          writeCart(cartItems().filter(function (x) { return x.id !== it.id; })); render();
+        });
+        list.appendChild(li);
+      });
+      document.getElementById('cart-total').textContent = rsd(total);
+    };
+    render();
+
+    order.querySelectorAll('input[name="dioptrija_nacin"]').forEach(function (r) {
+      r.addEventListener('change', function () { rx.hidden = r.value !== 'Upisaću dioptriju' || !r.checked; });
+    });
+
+    order.addEventListener('submit', function (e) {
+      e.preventDefault();
+      err.hidden = true;
+      var f = new FormData(order);
+      if (f.get('_honey')) return;
+      var missing = [];
+      if (!String(f.get('ime') || '').trim()) missing.push('ime i prezime');
+      if (!String(f.get('telefon') || '').trim()) missing.push('telefon');
+      if (!f.get('saglasnost')) missing.push('saglasnost');
+      if (missing.length) { err.textContent = 'Popunite: ' + missing.join(', ') + '.'; err.hidden = false; return; }
+      var items = cartItems();
+      var total = 0;
+      var lines = items.map(function (it, i) { total += it.cena || 0; return (i + 1) + '. ' + it.ime + ' (' + (it.cena ? rsd(it.cena) : 'cena na upit') + '), staklo: ' + it.staklo; });
+      var nacin = f.get('dioptrija_nacin');
+      var v = function (k) { return String(f.get(k) || '').trim() || '-'; };
+      var data = {
+        _subject: 'Nova porudžbina sa sajta: ' + f.get('ime'),
+        _template: 'table',
+        _captcha: 'false',
+        'Ime i prezime': f.get('ime'), 'Telefon': f.get('telefon'), 'Email': f.get('email') || '-',
+        'Okviri': lines.join('\n'), 'Okviri ukupno': rsd(total), 'Dioptrija': nacin
+      };
+      if (nacin === 'Upisaću dioptriju') {
+        data['Desno oko (OD)'] = 'SPH ' + v('od_sph') + ', CYL ' + v('od_cyl') + ', AX ' + v('od_ax');
+        data['Levo oko (OS)'] = 'SPH ' + v('os_sph') + ', CYL ' + v('os_cyl') + ', AX ' + v('os_ax');
+        data['PD'] = v('pd'); data['ADD'] = v('add');
+      }
+      data['Napomena'] = v('napomena');
+      data['Preuzimanje'] = 'U radnji, TC Medaković 3';
+      if (f.get('email')) data._replyto = f.get('email');
+      var btn = order.querySelector('.order-submit');
+      btn.disabled = true; btn.textContent = 'Šaljem...';
+      fetch(order.getAttribute('data-endpoint'), {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data)
+      }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (res) {
+          if (!res.ok || String(res.j && res.j.success) === 'false') throw new Error(res.j && res.j.message || 'greška');
+          writeCart([]);
+          order.hidden = true; done.hidden = false;
+          if (typeof window.gtag === 'function') window.gtag('event', 'porudzbina_poslata', { value: total, currency: 'RSD' });
+          window.scrollTo(0, 0);
+        })
+        .catch(function () {
+          err.innerHTML = 'Porudžbina nije poslata. Pokušajte ponovo ili nam pišite na <a class="text-link" href="viber://chat?number=%2B381603175264">Viber</a> ili pozovite <a class="text-link" href="tel:+381603175264">060 3175264</a>.';
+          err.hidden = false;
+        })
+        .then(function () { btn.disabled = false; btn.textContent = 'Pošalji porudžbinu'; });
+    });
+  }
+
   // ---------- Reveal pri skrolu ----------
   var targets = document.querySelectorAll(
     '.h2, .wall-item, .clip-photo, .svc-list li, .story-text, .visit-block, .visit-map, .link-card, .photo, .cta-panel'

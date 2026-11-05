@@ -45,7 +45,19 @@ def img(base, alt, w=800, h=600, sizes='100vw', cls='', lazy=True):
 
 
 def okvir_img_base(o, view):
-    return f'/images/okviri/{o["slug"]}/{o["slug"]}-{view}'
+    f = o.get('slike', o['slug'])
+    return f'/images/okviri/{f}/{f}-{view}'
+
+
+def rsd(n):
+    return f'{n:,.0f}'.replace(',', '.') + ' RSD'
+
+
+STAKLA = json.loads((ROOT / 'data' / 'okviri.json').read_text(encoding='utf-8')).get('stakla', [])
+FORM_EMAIL = 'optikavisage@gmail.com'
+CART_SVG = ('<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
+            'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h15l-1.5 9h-12z"/>'
+            '<path d="M6 7 5 3H2"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg>')
 
 
 def kartica(o, sizes='(max-width: 1020px) 50vw, 25vw'):
@@ -61,7 +73,8 @@ def kartica(o, sizes='(max-width: 1020px) 50vw, 25vw'):
             f'            <span class="wall-img wall-img--studio">{main}{alt}</span>\n'
             f'            <span class="wall-name">{escape(o["kratko"])}</span>\n'
             f'            <span class="wall-cat">{escape(o["tip"])}</span>\n'
-            f'          </a>\n        </li>')
+            + (f'            <span class="wall-price">{rsd(o["cena"])}</span>\n' if o.get('cena') else '')
+            + f'          </a>\n        </li>')
 
 
 # ---------------------------------------------------------------- okvir stranice
@@ -136,6 +149,7 @@ def nav(active):
       <a href="tel:{TEL}" class="nav-tel">{TEL_TXT}</a>
       <a href="{VIBER}" class="btn btn-primary nav-cta">Zakažite proveru</a>
     </nav>
+    <a href="/korpa/" class="nav-cart" aria-label="Korpa" hidden>{CART_SVG}<span class="nav-cart-n">0</span></a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">Meni</button>
   </div>
 </header>
@@ -292,14 +306,40 @@ def build_model(o):
     </div>
   </section>
 '''
+    if o.get('cena'):
+        opts = ''.join(f'<option>{escape(x)}</option>' for x in STAKLA)
+        buy = f'''<p class="model-price"><strong>{rsd(o["cena"])}</strong><span>Okvir sa clip-on sunčanim staklom. Cenu dioptrijskih stakala javljamo pre izrade.</span></p>
+        <div class="buy" data-slug="{o["slug"]}" data-ime="{escape(o["ime"])}" data-cena="{o["cena"]}" data-slika="{okvir_img_base(o, (o.get("kartica") or ("uporedjenje-bez" if o.get("par") else "spreda")))}-800.webp">
+          <label class="field"><span>Staklo</span><select class="buy-staklo">{opts}</select></label>
+          <button type="button" class="btn btn-primary buy-add">Dodaj u korpu</button>
+          <p class="buy-done" hidden>Dodato u korpu. <a class="text-link" href="/korpa/">Idi u korpu</a></p>
+        </div>
+        <p class="model-alt">Imate pitanje? <a class="text-link" href="{VIBER}">Pišite na Viber</a> ili pozovite <a class="text-link" href="tel:{TEL}">{TEL_TXT}</a>.</p>'''
+    else:
+        buy = f'''<p class="model-price"><strong>Cena na upit</strong><span>Pozovite ili pišite na Viber za cenu i dostupnost.</span></p>
+        <div class="model-actions">
+          <a href="{VIBER}" class="btn btn-primary">Pitajte za ovaj okvir</a>
+          <a href="tel:{TEL}" class="btn btn-line">Pozovite {TEL_TXT}</a>
+        </div>'''
     others = [x for x in OKVIRI if x['slug'] != o['slug']]
     same = [x for x in others if set(x['filteri']) & set(o['filteri'])]
     rest = [x for x in others if x not in same]
     related = (same + rest)[:4]
     rel = '\n'.join(kartica(x) for x in related)
-    html = head(f'{o["ime"]} | Optika Visage, Voždovac',
+    schema = [cs]
+    if o.get('cena'):
+        prod = {'@context': 'https://schema.org', '@type': 'Product', 'name': o['ime'], 'description': o['opis'],
+                'image': [SITE + okvir_img_base(o, v) + '-1600.webp' for v in views],
+                'offers': {'@type': 'Offer', 'price': str(o['cena']), 'priceCurrency': 'RSD',
+                           'availability': 'https://schema.org/InStock', 'url': SITE + path}}
+        if o.get('brend'):
+            prod['brand'] = {'@type': 'Brand', 'name': o['brend']}
+        schema.append(prod)
+    sub = o.get('podnaslov', '')
+    title_name = f'{o["ime"]}: {sub[:1].lower() + sub[1:]}' if sub else o['ime']
+    html = head(f'{title_name} | Optika Visage',
                 (o['opis'][:150].rsplit(' ', 1)[0] + '...') if len(o['opis']) > 155 else o['opis'],
-                path, [cs], og_image=okvir_img_base(o, views[0]) + '-1600.webp')
+                path, schema, og_image=okvir_img_base(o, views[0]) + '-1600.webp')
     html += nav('okviri') + '\n<main id="sadrzaj">\n'
     html += f'''
   <section class="page-head page-head--model">
@@ -316,15 +356,12 @@ def build_model(o):
         </ul>
       </div>
       <div class="model-info">
-        <p class="model-type">{escape(o["tip"])}</p>
+        <p class="model-type">{escape(o.get("brend") or o["tip"].split(",")[0])}</p>
         <h1 class="model-title" id="model-title">{escape(o["ime"])}</h1>
+        <p class="model-sub">{escape(o.get("podnaslov", o["tip"]))}</p>
+        {buy}
         <p class="model-desc">{escape(o["opis"])}</p>
         <dl class="specs">{specs}</dl>
-        <p class="model-price">Cene okvira kreću se od 1.000 do 20.000 RSD. Za cenu ovog modela pozovite ili pišite na Viber.</p>
-        <div class="model-actions">
-          <a href="{VIBER}" class="btn btn-primary">Pitajte za ovaj okvir</a>
-          <a href="tel:{TEL}" class="btn btn-line">Pozovite {TEL_TXT}</a>
-        </div>
         <p class="model-note">Provera dioptrije je uračunata u cenu kompletnih naočara. <a class="text-link" href="/usluge/provera-dioptrije/">Kako izgleda provera</a></p>
       </div>
     </div>
@@ -614,6 +651,101 @@ def build_pitanja():
     return write('/pitanja/', html)
 
 
+def build_korpa():
+    cr, cs = breadcrumbs([('Početna', '/'), ('Korpa', '/korpa/')])
+    opts = ''.join(f'<option>{escape(x)}</option>' for x in STAKLA)
+    def eye(side, label):
+        return (f'<div class="rx-row"><span class="rx-eye">{label}</span>'
+                f'<label><span>SPH</span><input name="{side}_sph" inputmode="decimal" placeholder="npr. -1,25" autocomplete="off"></label>'
+                f'<label><span>CYL</span><input name="{side}_cyl" inputmode="decimal" placeholder="npr. -0,50" autocomplete="off"></label>'
+                f'<label><span>AX</span><input name="{side}_ax" inputmode="numeric" placeholder="0 do 180" autocomplete="off"></label></div>')
+    html = head('Korpa | Optika Visage', 'Pregled izabranih okvira i slanje porudžbine Optici Visage.', '/korpa/', [cs])
+    html = html.replace('<meta name="robots" content="index, follow, max-image-preview:large">', '<meta name="robots" content="noindex">')
+    html += nav('') + '\n<main id="sadrzaj">\n'
+    html += page_head(cr, 'Korpa', 'Pošaljite porudžbinu, a mi Vam se javljamo da potvrdimo stakla, cenu i termin preuzimanja.')
+    html += f'''
+  <section class="section cart" aria-label="Korpa">
+    <div class="container cart-inner">
+      <div class="cart-empty" id="cart-empty" hidden>
+        <p>Korpa je prazna.</p>
+        <a href="/okviri/" class="btn btn-glass">Pogledaj naočare</a>
+      </div>
+
+      <form class="order" id="order" novalidate data-endpoint="https://formsubmit.co/ajax/{FORM_EMAIL}" hidden>
+        <h2 class="order-h">Izabrani okviri</h2>
+        <ul class="cart-list" id="cart-list"></ul>
+        <template id="cart-item">
+          <li class="cart-item">
+            <img class="cart-img" alt="" width="800" height="500" loading="lazy">
+            <div class="cart-body">
+              <a class="cart-name"></a>
+              <span class="cart-price"></span>
+              <label class="field field--small"><span>Staklo</span><select class="cart-staklo">{opts}</select></label>
+            </div>
+            <button type="button" class="cart-remove" aria-label="Ukloni iz korpe">Ukloni</button>
+          </li>
+        </template>
+        <p class="cart-total">Okviri ukupno: <strong id="cart-total">0 RSD</strong></p>
+        <p class="cart-note">Cenu dioptrijskih stakala javljamo pre izrade. Provera dioptrije je uračunata u cenu kompletnih naočara.</p>
+
+        <h2 class="order-h">Dioptrija</h2>
+        <fieldset class="choice" id="rx-choice">
+          <legend class="visually-hidden">Kako ćete nam dati dioptriju</legend>
+          <label><input type="radio" name="dioptrija_nacin" value="Upisaću dioptriju" checked> Upisaću dioptriju</label>
+          <label><input type="radio" name="dioptrija_nacin" value="Doneću recept u radnju"> Doneću recept u radnju</label>
+          <label><input type="radio" name="dioptrija_nacin" value="Želim proveru dioptrije u radnji"> Želim proveru dioptrije u radnji</label>
+        </fieldset>
+        <div class="rx" id="rx">
+          <p class="rx-help">Prepišite vrednosti sa recepta. SPH je jačina stakla, CYL i AX su vrednosti za astigmatizam, a PD je razmak između zenica. Polja koja nemate na receptu ostavite prazna.</p>
+          {eye('od', 'Desno oko')}
+          {eye('os', 'Levo oko')}
+          <div class="rx-row rx-row--extra">
+            <label><span>PD</span><input name="pd" inputmode="decimal" placeholder="npr. 62" autocomplete="off"></label>
+            <label><span>ADD</span><input name="add" inputmode="decimal" placeholder="za progresivna" autocomplete="off"></label>
+          </div>
+        </div>
+
+        <h2 class="order-h">Vaši podaci</h2>
+        <div class="fields">
+          <label class="field"><span>Ime i prezime *</span><input name="ime" required autocomplete="name"></label>
+          <label class="field"><span>Telefon *</span><input name="telefon" required type="tel" inputmode="tel" autocomplete="tel"></label>
+          <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email"></label>
+          <label class="field field--wide"><span>Napomena</span><textarea name="napomena" rows="3"></textarea></label>
+        </div>
+        <p class="pickup"><strong>Preuzimanje u radnji</strong> Braće Srnić 23a, TC Medaković 3, lokal 45. Plaćanje pri preuzimanju: gotovina, kartice, čekovi ili na rate.</p>
+        <label class="consent"><input type="checkbox" name="saglasnost" required> Saglasan/na sam da Optika Visage koristi moje podatke, uključujući dioptriju, samo radi obrade ove porudžbine. *</label>
+        <input type="text" name="_honey" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <p class="order-error" id="order-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary order-submit">Pošalji porudžbinu</button>
+      </form>
+
+      <div class="order-done" id="order-done" hidden>
+        <h2 class="h2">Hvala, porudžbina je poslata.</h2>
+        <p class="lead center">Javljamo Vam se telefonom da potvrdimo stakla, cenu i termin preuzimanja.</p>
+        <a href="/okviri/" class="btn btn-glass">Nazad na okvire</a>
+      </div>
+    </div>
+  </section>
+'''
+    html += '\n</main>\n' + FOOTER
+    write('/korpa/', html)
+
+
+def build_pocetna_zid():
+    """Upisuje kartice okvira na početnu, između oznaka ZID:START i ZID:END."""
+    p = ROOT / 'index.html'
+    s = p.read_text(encoding='utf-8')
+    a, b = '<!-- ZID:START -->', '<!-- ZID:END -->'
+    if a not in s:
+        return
+    izbor = ['kubik', 'tony-morgan-clip-on-1', 'tony-morgan-clip-on-2', 'tony-morgan-clip-on-3',
+             'tony-morgan-clip-on-4', 'tony-morgan-clip-on-5', 'william-morris', 'diva-trend-roze-zlatni']
+    po = {o['slug']: o for o in OKVIRI}
+    cards = '\n'.join(kartica(po[x]) for x in izbor if x in po)
+    i, j = s.index(a) + len(a), s.index(b)
+    p.write_text(s[:i] + '\n' + cards + '\n      ' + s[j:], encoding='utf-8')
+
+
 def build_sitemap(paths):
     urls = ['/'] + paths
     body = ''.join(f'  <url>\n    <loc>{SITE}{p}</loc>\n    <lastmod>{TODAY}</lastmod>\n  </url>\n' for p in urls)
@@ -627,6 +759,8 @@ def main():
     paths += [build_model(o) for o in OKVIRI]
     paths += build_usluge()
     paths += [build_o_nama(), build_kontakt(), build_pitanja()]
+    build_korpa()
+    build_pocetna_zid()
     build_sitemap(paths)
     print(len(paths), 'stranica:', ' '.join(paths))
 

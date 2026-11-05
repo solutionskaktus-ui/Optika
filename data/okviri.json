@@ -1,119 +1,483 @@
 {
-  "_napomena": "Podaci za stranice okvira. Nazivi i opisi prate NAZIVI_OKVIRA.md. Posle izmene pokrenuti: python3 tools/stranice.py. Slike prave tools/okviri-slike.py u images/okviri/<slug>/.",
+  "_napomena": "Podaci za stranice okvira. Nazivi i opisi prate NAZIVI_OKVIRA.md. Posle izmene pokrenuti: python3 tools/stranice.py. Slike prave tools/okviri-slike.py u images/okviri/<slug>/. Polje \"slike\" je folder u images/okviri/, \"cena\" je u RSD (null = cena na upit).",
   "okviri": [
     {
       "slug": "kubik",
       "ime": "Kubik okvir",
       "kratko": "Kubik",
       "tip": "Clip-on okvir",
-      "filteri": ["clip-on"],
+      "filteri": [
+        "clip-on"
+      ],
       "opis": "Kubik okvir od providnog sivo-plavog acetata, vrste plastike od koje se prave okviri. Na gornjem rubu ima beli detalj, vrhovi drški su zeleni, a spreda su dva srebrna zakivka. Uz okvir ide clip-on, dodatno sunčano staklo koje se kači na okvir sa dioptrijom.",
-      "osobine": [["Boja", "Providna sivo-plava"], ["Materijal", "Acetat"], ["Clip-on", "Da, tamno sunčano staklo"]],
-      "pogledi": ["spreda", "poluprofil", "profil", "clip-on-spreda", "clip-on-poluprofil"],
-      "par": true
+      "osobine": [
+        [
+          "Boja",
+          "Providna sivo-plava"
+        ],
+        [
+          "Materijal",
+          "Acetat"
+        ],
+        [
+          "Clip-on",
+          "Da, tamno sunčano staklo"
+        ]
+      ],
+      "pogledi": [
+        "spreda",
+        "poluprofil",
+        "profil",
+        "clip-on-spreda",
+        "clip-on-poluprofil"
+      ],
+      "par": true,
+      "brend": "Kubik",
+      "podnaslov": "Clip-on okvir, providni sivo-plavi",
+      "slike": "kubik",
+      "cena": 7800
     },
     {
-      "slug": "tony-morgan-sampanj",
-      "ime": "Tony Morgan clip-on okvir u boji šampanjca",
-      "kratko": "Tony Morgan, šampanj",
-      "tip": "Clip-on okvir",
-      "filteri": ["clip-on"],
+      "slug": "tony-morgan-clip-on-1",
+      "ime": "Tony Morgan Clip-on 1",
+      "kratko": "Tony Morgan Clip-on 1",
+      "tip": "Clip-on okvir, šampanj",
+      "filteri": [
+        "clip-on"
+      ],
       "opis": "Tony Morgan clip-on okvir od providnog toplog bež acetata, vrste plastike od koje se prave okviri, sa ukrasnim zlatnim detaljem na drškama. Clip-on, dodatno sunčano staklo koje se kači na okvir sa dioptrijom, je smeđe.",
-      "osobine": [["Boja", "Šampanj, providna topla bež"], ["Materijal", "Acetat"], ["Clip-on", "Da, smeđe sunčano staklo"]],
-      "pogledi": ["spreda", "poluprofil", "profil", "clip-on-spreda", "clip-on-poluprofil", "clip-on-profil", "futrola"],
-      "par": true
+      "osobine": [
+        [
+          "Boja",
+          "Šampanj, providna topla bež"
+        ],
+        [
+          "Materijal",
+          "Acetat"
+        ],
+        [
+          "Clip-on",
+          "Da, smeđe sunčano staklo"
+        ]
+      ],
+      "pogledi": [
+        "spreda",
+        "poluprofil",
+        "profil",
+        "clip-on-spreda",
+        "clip-on-poluprofil",
+        "clip-on-profil",
+        "futrola"
+      ],
+      "par": true,
+      "slike": "tony-morgan-sampanj",
+      "podnaslov": "Clip-on okvir u boji šampanjca",
+      "brend": "Tony Morgan",
+      "cena": 7800
     },
     {
-      "slug": "tony-morgan-leptir",
-      "ime": "Tony Morgan clip-on okvir, tamnoplavi leptir",
-      "kratko": "Tony Morgan, leptir",
-      "tip": "Clip-on okvir",
-      "filteri": ["clip-on"],
+      "slug": "tony-morgan-clip-on-2",
+      "ime": "Tony Morgan Clip-on 2",
+      "kratko": "Tony Morgan Clip-on 2",
+      "tip": "Clip-on okvir, tamnoplavi leptir",
+      "filteri": [
+        "clip-on"
+      ],
       "opis": "Tony Morgan clip-on okvir u obliku leptira, mat tamnoplave boje. Gornja ivica je široka i ravna, spoljni uglovi su oštri, a donji deo se sužava ka nosu. Uz okvir ide clip-on, dodatno sunčano staklo koje se kači na okvir sa dioptrijom.",
-      "osobine": [["Oblik", "Leptir"], ["Boja", "Mat tamnoplava"], ["Clip-on", "Da, tamno sunčano staklo"]],
-      "pogledi": ["spreda", "poluprofil", "profil", "clip-on-spreda", "clip-on-poluprofil", "clip-on-profil", "futrola"],
-      "par": true
+      "osobine": [
+        [
+          "Oblik",
+          "Leptir"
+        ],
+        [
+          "Boja",
+          "Mat tamnoplava"
+        ],
+        [
+          "Clip-on",
+          "Da, tamno sunčano staklo"
+        ]
+      ],
+      "pogledi": [
+        "spreda",
+        "poluprofil",
+        "profil",
+        "clip-on-spreda",
+        "clip-on-poluprofil",
+        "clip-on-profil",
+        "futrola"
+      ],
+      "par": true,
+      "slike": "tony-morgan-leptir",
+      "podnaslov": "Clip-on okvir, tamnoplavi leptir",
+      "brend": "Tony Morgan",
+      "cena": 7800
     },
     {
-      "slug": "tony-morgan-cat-eye",
-      "ime": "Tony Morgan clip-on okvir, tamnoplavi cat-eye",
-      "kratko": "Tony Morgan, cat-eye",
-      "tip": "Clip-on okvir",
-      "filteri": ["clip-on"],
+      "slug": "tony-morgan-clip-on-3",
+      "ime": "Tony Morgan Clip-on 3",
+      "kratko": "Tony Morgan Clip-on 3",
+      "tip": "Clip-on okvir, tamnoplavi cat-eye",
+      "filteri": [
+        "clip-on"
+      ],
       "opis": "Tony Morgan clip-on okvir u obliku mačjeg oka (cat-eye, oblik sa blago podignutim spoljnim uglovima), mat tamnoplave boje. Uži je i zaobljeniji, a kod šarki ima mali srebrni detalj. Uz okvir ide clip-on, dodatno sunčano staklo koje se kači na okvir sa dioptrijom.",
-      "osobine": [["Oblik", "Cat-eye"], ["Boja", "Mat tamnoplava"], ["Clip-on", "Da, tamno sunčano staklo"]],
-      "pogledi": ["spreda", "poluprofil", "profil", "clip-on-spreda", "clip-on-poluprofil", "clip-on-pored", "futrola-otvorena-1"],
-      "par": true
+      "osobine": [
+        [
+          "Oblik",
+          "Cat-eye"
+        ],
+        [
+          "Boja",
+          "Mat tamnoplava"
+        ],
+        [
+          "Clip-on",
+          "Da, tamno sunčano staklo"
+        ]
+      ],
+      "pogledi": [
+        "spreda",
+        "poluprofil",
+        "profil",
+        "clip-on-spreda",
+        "clip-on-poluprofil",
+        "clip-on-pored",
+        "futrola-otvorena-1"
+      ],
+      "par": true,
+      "slike": "tony-morgan-cat-eye",
+      "podnaslov": "Clip-on okvir, tamnoplavi cat-eye",
+      "brend": "Tony Morgan",
+      "cena": 7800
     },
     {
-      "slug": "tony-morgan-okrugli",
-      "ime": "Tony Morgan clip-on okvir, tamnoplavi okrugli",
-      "kratko": "Tony Morgan, okrugli",
-      "tip": "Clip-on okvir",
-      "filteri": ["clip-on"],
+      "slug": "tony-morgan-clip-on-4",
+      "ime": "Tony Morgan Clip-on 4",
+      "kratko": "Tony Morgan Clip-on 4",
+      "tip": "Clip-on okvir, tamnoplavi okrugli",
+      "filteri": [
+        "clip-on"
+      ],
       "opis": "Tony Morgan clip-on okvir sa okruglim staklima, mat tamnoplave boje, sa ključastim mostom, odnosno mostom u obliku ključaonice iznad nosa. Uz okvir ide clip-on, dodatno sunčano staklo koje se kači na okvir sa dioptrijom.",
-      "osobine": [["Oblik", "Okrugli"], ["Boja", "Mat tamnoplava"], ["Clip-on", "Da, tamno sunčano staklo"]],
-      "pogledi": ["spreda", "poluprofil", "profil", "clip-on-spreda", "clip-on-poluprofil", "clip-on-profil", "futrola"],
-      "par": true
+      "osobine": [
+        [
+          "Oblik",
+          "Okrugli"
+        ],
+        [
+          "Boja",
+          "Mat tamnoplava"
+        ],
+        [
+          "Clip-on",
+          "Da, tamno sunčano staklo"
+        ]
+      ],
+      "pogledi": [
+        "spreda",
+        "poluprofil",
+        "profil",
+        "clip-on-spreda",
+        "clip-on-poluprofil",
+        "clip-on-profil",
+        "futrola"
+      ],
+      "par": true,
+      "slike": "tony-morgan-okrugli",
+      "podnaslov": "Clip-on okvir, tamnoplavi okrugli",
+      "brend": "Tony Morgan",
+      "cena": 7800
     },
     {
-      "slug": "tony-morgan-pravougaoni",
-      "ime": "Tony Morgan clip-on okvir, tamnoplavi pravougaoni",
-      "kratko": "Tony Morgan, pravougaoni",
-      "tip": "Clip-on okvir",
-      "filteri": ["clip-on"],
+      "slug": "tony-morgan-clip-on-5",
+      "ime": "Tony Morgan Clip-on 5",
+      "kratko": "Tony Morgan Clip-on 5",
+      "tip": "Clip-on okvir, tamnoplavi pravougaoni",
+      "filteri": [
+        "clip-on"
+      ],
       "opis": "Tony Morgan clip-on okvir pravougaonog oblika, mat tamnoplave boje i širokog kroja. Uz okvir ide clip-on, dodatno sunčano staklo koje se kači na okvir sa dioptrijom.",
-      "osobine": [["Oblik", "Pravougaoni"], ["Boja", "Mat tamnoplava"], ["Clip-on", "Da, tamno sunčano staklo"]],
-      "pogledi": ["spreda", "poluprofil", "profil", "clip-on-spreda", "clip-on-poluprofil", "clip-on-profil", "futrola"],
-      "par": true
+      "osobine": [
+        [
+          "Oblik",
+          "Pravougaoni"
+        ],
+        [
+          "Boja",
+          "Mat tamnoplava"
+        ],
+        [
+          "Clip-on",
+          "Da, tamno sunčano staklo"
+        ]
+      ],
+      "pogledi": [
+        "spreda",
+        "poluprofil",
+        "profil",
+        "clip-on-spreda",
+        "clip-on-poluprofil",
+        "clip-on-profil",
+        "futrola"
+      ],
+      "par": true,
+      "slike": "tony-morgan-pravougaoni",
+      "podnaslov": "Clip-on okvir, tamnoplavi pravougaoni",
+      "brend": "Tony Morgan",
+      "cena": 7800
+    },
+    {
+      "slug": "tony-morgan-clip-on-6",
+      "slike": "tony-morgan-crni-sportski",
+      "ime": "Tony Morgan Clip-on 6",
+      "kratko": "Tony Morgan Clip-on 6",
+      "tip": "Clip-on okvir, mat crni sportski",
+      "podnaslov": "Clip-on okvir, mat crni sportski",
+      "brend": "Tony Morgan",
+      "filteri": [
+        "clip-on"
+      ],
+      "opis": "Tony Morgan clip-on okvir mat crne boje, sportskog oblika. Uz okvir ide clip-on, dodatno sunčano staklo koje se kači na okvir sa dioptrijom.",
+      "osobine": [
+        [
+          "Oblik",
+          "Sportski"
+        ],
+        [
+          "Boja",
+          "Mat crna"
+        ],
+        [
+          "Clip-on",
+          "Da, tamno sunčano staklo"
+        ]
+      ],
+      "pogledi": [
+        "futrola"
+      ],
+      "kartica": "futrola",
+      "par": false,
+      "cena": 7800
+    },
+    {
+      "slug": "tony-morgan-clip-on-7",
+      "slike": "tony-morgan-plave-drske",
+      "ime": "Tony Morgan Clip-on 7",
+      "kratko": "Tony Morgan Clip-on 7",
+      "tip": "Clip-on okvir, plave drške",
+      "podnaslov": "Clip-on okvir sa plavim metalnim drškama",
+      "brend": "Tony Morgan",
+      "filteri": [
+        "clip-on"
+      ],
+      "opis": "Tony Morgan clip-on okvir sa tamnim prednjim delom i plavim metalnim drškama. Uz okvir ide clip-on, dodatno sunčano staklo koje se kači na okvir sa dioptrijom.",
+      "osobine": [
+        [
+          "Boja",
+          "Tamni prednji deo, plave drške"
+        ],
+        [
+          "Drške",
+          "Metalne"
+        ],
+        [
+          "Clip-on",
+          "Da, tamno sunčano staklo"
+        ]
+      ],
+      "pogledi": [
+        "futrola"
+      ],
+      "kartica": "futrola",
+      "par": false,
+      "cena": 7800
+    },
+    {
+      "slug": "tony-morgan-clip-on-8",
+      "slike": "tony-morgan-crni-pravougaoni",
+      "ime": "Tony Morgan Clip-on 8",
+      "kratko": "Tony Morgan Clip-on 8",
+      "tip": "Clip-on okvir, mat crni pravougaoni",
+      "podnaslov": "Clip-on okvir, mat crni pravougaoni",
+      "brend": "Tony Morgan",
+      "filteri": [
+        "clip-on"
+      ],
+      "opis": "Tony Morgan clip-on okvir pravougaonog oblika, mat crne boje. Uz okvir ide clip-on, dodatno sunčano staklo koje se kači na okvir sa dioptrijom.",
+      "osobine": [
+        [
+          "Oblik",
+          "Pravougaoni"
+        ],
+        [
+          "Boja",
+          "Mat crna"
+        ],
+        [
+          "Clip-on",
+          "Da, tamno sunčano staklo"
+        ]
+      ],
+      "pogledi": [
+        "futrola"
+      ],
+      "kartica": "futrola",
+      "par": false,
+      "cena": 7800
     },
     {
       "slug": "crni-cat-eye-acetat",
       "ime": "Crni cat-eye okvir od sjajnog acetata",
       "kratko": "Crni cat-eye",
       "tip": "Clip-on okvir",
-      "filteri": ["clip-on"],
+      "filteri": [
+        "clip-on"
+      ],
       "opis": "Cat-eye okvir, oblika sa blago podignutim spoljnim uglovima, od sjajnog crnog acetata, vrste plastike od koje se prave okviri. Okvir je deblji, sa zlatnim detaljima na drškama. Uz okvir ide clip-on, dodatno sunčano staklo koje se kači na okvir sa dioptrijom.",
-      "osobine": [["Oblik", "Cat-eye"], ["Boja", "Sjajna crna, zlatni detalji"], ["Materijal", "Acetat"], ["Clip-on", "Da, tamno sunčano staklo"]],
-      "pogledi": ["spreda", "poluprofil", "sa-strane", "otpozadi", "clip-on-podignut"],
+      "osobine": [
+        [
+          "Oblik",
+          "Cat-eye"
+        ],
+        [
+          "Boja",
+          "Sjajna crna, zlatni detalji"
+        ],
+        [
+          "Materijal",
+          "Acetat"
+        ],
+        [
+          "Clip-on",
+          "Da, tamno sunčano staklo"
+        ]
+      ],
+      "pogledi": [
+        "spreda",
+        "poluprofil",
+        "sa-strane",
+        "otpozadi",
+        "clip-on-podignut"
+      ],
       "kartica": "kartica",
-      "par": false
+      "par": false,
+      "podnaslov": "Clip-on okvir od sjajnog crnog acetata",
+      "slike": "crni-cat-eye-acetat",
+      "cena": 7800
     },
     {
       "slug": "william-morris",
       "ime": "William Morris okvir, geometrijski od nerđajućeg čelika",
       "kratko": "William Morris",
       "tip": "Metalni okvir",
-      "filteri": ["metalni"],
+      "filteri": [
+        "metalni"
+      ],
       "opis": "William Morris okvir geometrijskog oblika, od nerđajućeg čelika. Stakla su šestougaona, metal je tanak i braon, a na unutrašnjem obodu ima svetloplavi akcenat.",
-      "osobine": [["Oblik", "Geometrijski, šestougaona stakla"], ["Boja", "Braon sa svetloplavim akcentom"], ["Materijal", "Nerđajući čelik"]],
-      "pogledi": ["spreda", "profil", "spreda-2"],
+      "osobine": [
+        [
+          "Oblik",
+          "Geometrijski, šestougaona stakla"
+        ],
+        [
+          "Boja",
+          "Braon sa svetloplavim akcentom"
+        ],
+        [
+          "Materijal",
+          "Nerđajući čelik"
+        ]
+      ],
+      "pogledi": [
+        "spreda",
+        "profil",
+        "spreda-2"
+      ],
       "kartica": "spreda",
-      "par": false
+      "par": false,
+      "brend": "William Morris",
+      "podnaslov": "Metalni okvir, geometrijski od nerđajućeg čelika",
+      "slike": "william-morris",
+      "cena": null
     },
     {
       "slug": "diva-trend-zlatni",
       "ime": "Diva trend okvir, zlatni geometrijski cat-eye",
       "kratko": "Diva trend, zlatni",
       "tip": "Metalni okvir",
-      "filteri": ["metalni"],
+      "filteri": [
+        "metalni"
+      ],
       "opis": "Diva trend okvir od tankog zlatnog metala, geometrijskog cat-eye oblika, sa blago podignutim spoljnim uglovima. Na drški ima šareni mozaik detalj.",
-      "osobine": [["Oblik", "Geometrijski cat-eye"], ["Boja", "Zlatna, šareni mozaik na drški"], ["Materijal", "Metal"]],
-      "pogledi": ["spreda", "profil"],
+      "osobine": [
+        [
+          "Oblik",
+          "Geometrijski cat-eye"
+        ],
+        [
+          "Boja",
+          "Zlatna, šareni mozaik na drški"
+        ],
+        [
+          "Materijal",
+          "Metal"
+        ]
+      ],
+      "pogledi": [
+        "spreda",
+        "profil"
+      ],
       "kartica": "spreda",
-      "par": false
+      "par": false,
+      "brend": "Diva trend",
+      "podnaslov": "Metalni okvir, zlatni geometrijski cat-eye",
+      "slike": "diva-trend-zlatni",
+      "cena": null
     },
     {
       "slug": "diva-trend-roze-zlatni",
       "ime": "Diva trend okvir, roze-zlatni cat-eye",
       "kratko": "Diva trend, roze-zlatni",
       "tip": "Metalni okvir",
-      "filteri": ["metalni"],
+      "filteri": [
+        "metalni"
+      ],
       "opis": "Diva trend okvir u roze-zlatnoj boji, cat-eye oblika, sa crveno-roze cvetnim printom na obrvnom delu, odnosno gornjem delu okvira iznad stakala. Drške su ljubičaste.",
-      "osobine": [["Oblik", "Cat-eye"], ["Boja", "Roze-zlatna, cvetni print, ljubičaste drške"], ["Materijal", "Metal"]],
-      "pogledi": ["spreda", "profil", "sklopljen"],
+      "osobine": [
+        [
+          "Oblik",
+          "Cat-eye"
+        ],
+        [
+          "Boja",
+          "Roze-zlatna, cvetni print, ljubičaste drške"
+        ],
+        [
+          "Materijal",
+          "Metal"
+        ]
+      ],
+      "pogledi": [
+        "spreda",
+        "profil",
+        "sklopljen"
+      ],
       "kartica": "spreda",
-      "par": false
+      "par": false,
+      "brend": "Diva trend",
+      "podnaslov": "Metalni okvir, roze-zlatni cat-eye",
+      "slike": "diva-trend-roze-zlatni",
+      "cena": null
     }
+  ],
+  "stakla": [
+    "Posavetujte me u radnji",
+    "Samo okvir, bez dioptrijskih stakala",
+    "Dioptrijska stakla",
+    "Antirefleks",
+    "Filter za plavo svetlo",
+    "Progresivna stakla",
+    "Fotosenzitivna stakla"
   ]
 }

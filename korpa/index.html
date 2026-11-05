@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#FAF7FB">
+
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D939MT9X6K"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-D939MT9X6K');
+</script>
+
+<title>Korpa | Optika Visage</title>
+<meta name="description" content="Pregled izabranih okvira i slanje porudžbine Optici Visage.">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://optikavisage.com/korpa/">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="sr_RS">
+<meta property="og:site_name" content="Optika Visage">
+<meta property="og:title" content="Korpa | Optika Visage">
+<meta property="og:description" content="Pregled izabranih okvira i slanje porudžbine Optici Visage.">
+<meta property="og:image" content="https://optikavisage.com/images/og-image-visage-optika.jpg">
+<meta property="og:url" content="https://optikavisage.com/korpa/">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" type="image/x-icon" href="/favicons/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rethink+Sans:ital,wght@0,400..800;1,400..800&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/styles.css">
+<script>document.documentElement.classList.add('js');</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Početna",
+      "item": "https://optikavisage.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Korpa",
+      "item": "https://optikavisage.com/korpa/"
+    }
+  ]
+}
+</script>
+</head>
+<body class="sub">
+
+<a class="skip-link" href="#sadrzaj">Preskoči na sadržaj</a>
+
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="/" class="nav-logo" aria-label="Visage Optika, početna">
+      <img src="/images/visage-logo-mark.png" alt="" width="34" height="21">
+      <span class="logo-wordmark"><strong>VISAGE</strong>OPTIKA</span>
+    </a>
+    <nav class="nav-menu" id="nav-menu" aria-label="Glavna navigacija">
+      <a href="/okviri/">Okviri</a>
+      <a href="/usluge/">Usluge</a>
+      <a href="/o-nama/">O nama</a>
+      <a href="/kontakt/">Kontakt</a>
+      <a href="tel:+381603175264" class="nav-tel">060 3175264</a>
+      <a href="viber://chat?number=%2B381603175264" class="btn btn-primary nav-cta">Zakažite proveru</a>
+    </nav>
+    <a href="/korpa/" class="nav-cart" aria-label="Korpa" hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h15l-1.5 9h-12z"/><path d="M6 7 5 3H2"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg><span class="nav-cart-n">0</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">Meni</button>
+  </div>
+</header>
+
+<main id="sadrzaj">
+
+  <section class="page-head">
+    <div class="container">
+      <nav aria-label="Putanja"><ol class="crumbs"><li><a href="/">Početna</a></li><li aria-current="page">Korpa</li></ol></nav>
+      <h1 class="page-title">Korpa</h1>
+      <p class="page-lead">Pošaljite porudžbinu, a mi Vam se javljamo da potvrdimo stakla, cenu i termin preuzimanja.</p>
+    </div>
+  </section>
+
+  <section class="section cart" aria-label="Korpa">
+    <div class="container cart-inner">
+      <div class="cart-empty" id="cart-empty" hidden>
+        <p>Korpa je prazna.</p>
+        <a href="/okviri/" class="btn btn-glass">Pogledaj naočare</a>
+      </div>
+
+      <form class="order" id="order" novalidate data-endpoint="https://formsubmit.co/ajax/optikavisage@gmail.com" hidden>
+        <h2 class="order-h">Izabrani okviri</h2>
+        <ul class="cart-list" id="cart-list"></ul>
+        <template id="cart-item">
+          <li class="cart-item">
+            <img class="cart-img" alt="" width="800" height="500" loading="lazy">
+            <div class="cart-body">
+              <a class="cart-name"></a>
+              <span class="cart-price"></span>
+              <label class="field field--small"><span>Staklo</span><select class="cart-staklo"><option>Posavetujte me u radnji</option><option>Samo okvir, bez dioptrijskih stakala</option><option>Dioptrijska stakla</option><option>Antirefleks</option><option>Filter za plavo svetlo</option><option>Progresivna stakla</option><option>Fotosenzitivna stakla</option></select></label>
+            </div>
+            <button type="button" class="cart-remove" aria-label="Ukloni iz korpe">Ukloni</button>
+          </li>
+        </template>
+        <p class="cart-total">Okviri ukupno: <strong id="cart-total">0 RSD</strong></p>
+        <p class="cart-note">Cenu dioptrijskih stakala javljamo pre izrade. Provera dioptrije je uračunata u cenu kompletnih naočara.</p>
+
+        <h2 class="order-h">Dioptrija</h2>
+        <fieldset class="choice" id="rx-choice">
+          <legend class="visually-hidden">Kako ćete nam dati dioptriju</legend>
+          <label><input type="radio" name="dioptrija_nacin" value="Upisaću dioptriju" checked> Upisaću dioptriju</label>
+          <label><input type="radio" name="dioptrija_nacin" value="Doneću recept u radnju"> Doneću recept u radnju</label>
+          <label><input type="radio" name="dioptrija_nacin" value="Želim proveru dioptrije u radnji"> Želim proveru dioptrije u radnji</label>
+        </fieldset>
+        <div class="rx" id="rx">
+          <p class="rx-help">Prepišite vrednosti sa recepta. SPH je jačina stakla, CYL i AX su vrednosti za astigmatizam, a PD je razmak između zenica. Polja koja nemate na receptu ostavite prazna.</p>
+          <div class="rx-row"><span class="rx-eye">Desno oko</span><label><span>SPH</span><input name="od_sph" inputmode="decimal" placeholder="npr. -1,25" autocomplete="off"></label><label><span>CYL</span><input name="od_cyl" inputmode="decimal" placeholder="npr. -0,50" autocomplete="off"></label><label><span>AX</span><input name="od_ax" inputmode="numeric" placeholder="0 do 180" autocomplete="off"></label></div>
+          <div class="rx-row"><span class="rx-eye">Levo oko</span><label><span>SPH</span><input name="os_sph" inputmode="decimal" placeholder="npr. -1,25" autocomplete="off"></label><label><span>CYL</span><input name="os_cyl" inputmode="decimal" placeholder="npr. -0,50" autocomplete="off"></label><label><span>AX</span><input name="os_ax" inputmode="numeric" placeholder="0 do 180" autocomplete="off"></label></div>
+          <div class="rx-row rx-row--extra">
+            <label><span>PD</span><input name="pd" inputmode="decimal" placeholder="npr. 62" autocomplete="off"></label>
+            <label><span>ADD</span><input name="add" inputmode="decimal" placeholder="za progresivna" autocomplete="off"></label>
+          </div>
+        </div>
+
+        <h2 class="order-h">Vaši podaci</h2>
+        <div class="fields">
+          <label class="field"><span>Ime i prezime *</span><input name="ime" required autocomplete="name"></label>
+          <label class="field"><span>Telefon *</span><input name="telefon" required type="tel" inputmode="tel" autocomplete="tel"></label>
+          <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email"></label>
+          <label class="field field--wide"><span>Napomena</span><textarea name="napomena" rows="3"></textarea></label>
+        </div>
+        <p class="pickup"><strong>Preuzimanje u radnji</strong> Braće Srnić 23a, TC Medaković 3, lokal 45. Plaćanje pri preuzimanju: gotovina, kartice, čekovi ili na rate.</p>
+        <label class="consent"><input type="checkbox" name="saglasnost" required> Saglasan/na sam da Optika Visage koristi moje podatke, uključujući dioptriju, samo radi obrade ove porudžbine. *</label>
+        <input type="text" name="_honey" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <p class="order-error" id="order-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary order-submit">Pošalji porudžbinu</button>
+      </form>
+
+      <div class="order-done" id="order-done" hidden>
+        <h2 class="h2">Hvala, porudžbina je poslata.</h2>
+        <p class="lead center">Javljamo Vam se telefonom da potvrdimo stakla, cenu i termin preuzimanja.</p>
+        <a href="/okviri/" class="btn btn-glass">Nazad na okvire</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <a href="/" class="nav-logo" aria-label="Visage Optika, početna">
+      <img src="/images/visage-logo-mark.png" alt="" width="34" height="21">
+      <span class="logo-wordmark"><strong>VISAGE</strong>OPTIKA</span>
+    </a>
+    <nav class="footer-links" aria-label="Stranice">
+      <a href="/okviri/">Okviri</a>
+      <a href="/usluge/">Usluge</a>
+      <a href="/o-nama/">O nama</a>
+      <a href="/kontakt/">Kontakt</a>
+      <a href="/pitanja/">Pitanja</a>
+      <a href="https://www.instagram.com/optika_visage/" rel="me noopener" target="_blank">Instagram</a>
+      <a href="https://www.facebook.com/optikavisage" rel="me noopener" target="_blank">Facebook</a>
+    </nav>
+    <p class="footer-contact"><span>Braće Srnić 23a, TC Medaković 3, lokal 45, 11050 Beograd</span><a href="tel:+381603175264">060 3175264</a><a href="mailto:optikavisage@gmail.com">optikavisage@gmail.com</a></p>
+    <p class="footer-legal"><span>© <span id="year">2026</span> Optika Visage</span><span>PIB 112372621</span><span>MB 21660418</span></p>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>
