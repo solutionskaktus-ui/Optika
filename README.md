@@ -105,18 +105,21 @@ Trenutno 3 generičke recenzije. Posle prvih 10+ pravih Google recenzija:
 
 ---
 
-## 🎨 Brand sistem
+## 🎨 Brand sistem (redizajn 2026)
+
+Svetla paleta, bez crnih površina i bez žute/zlatne.
 
 ```css
---primary: #5B0070   /* Ljubičasta — primary */
---accent:  #FFDA72   /* Žuta — accent */
---ink:     #0E0E0E   /* Tekst */
---bg:      #FFFFFF   /* Pozadina */
+--violet:    #5B0070   /* Ljubičasta — primarna */
+--violet-400:#9B62B1   /* Sekundarni tekst, oznake */
+--lilac-100: #F2EAF5   /* Paneli */
+--lilac-50:  #FAF7FB   /* Pozadina stranice */
+--ink:       #24102C   /* Tekst (tamna šljiva, ne crna) */
 ```
 
-**Tipografija:**
-- Display: `Fraunces` (Google Fonts) — serif sa karakterom za naslove
-- Body: `Rethink Sans` (Google Fonts) — isti font kao u logotipu
+**Tipografija:** `Rethink Sans` (Google Fonts), isti font kao u logotipu, za naslove i tekst.
+
+**Hero:** tablica za vid. Tablica se pri učitavanju izoštrava od −3.00 do 0.00 dioptrije, a posetilac može sam da je zamuti i izoštri klizačem.
 
 ---
 
