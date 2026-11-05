@@ -155,9 +155,53 @@
     });
   }
 
+  // ---------- Katalog: filter okvira ----------
+  var katalog = document.getElementById('katalog');
+  if (katalog) {
+    var fBtns = document.querySelectorAll('[data-filter]');
+    var applyFilter = function (f) {
+      katalog.querySelectorAll('.wall-item').forEach(function (it) {
+        var tags = (it.getAttribute('data-filteri') || '').split(' ');
+        it.classList.toggle('is-hidden', f !== 'svi' && tags.indexOf(f) === -1);
+      });
+      fBtns.forEach(function (b) {
+        var on = b.getAttribute('data-filter') === f;
+        b.classList.toggle('is-on', on);
+        b.setAttribute('aria-pressed', String(on));
+      });
+    };
+    fBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var f = b.getAttribute('data-filter');
+        applyFilter(f);
+        if (history.replaceState) history.replaceState(null, '', f === 'svi' ? location.pathname : '#' + f);
+      });
+    });
+    var h = location.hash.slice(1);
+    if (h && document.querySelector('[data-filter="' + h + '"]')) applyFilter(h);
+  }
+
+  // ---------- Stranica modela: galerija ----------
+  var gImg = document.querySelector('.gallery-img');
+  if (gImg) {
+    var thumbs = document.querySelectorAll('.thumb');
+    thumbs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        var base = t.getAttribute('data-src');
+        gImg.src = base + '-800.webp';
+        gImg.srcset = base + '-800.webp 800w, ' + base + '-1600.webp 1600w';
+        gImg.alt = t.getAttribute('data-alt');
+        thumbs.forEach(function (x) {
+          x.classList.toggle('is-on', x === t);
+          x.setAttribute('aria-pressed', String(x === t));
+        });
+      });
+    });
+  }
+
   // ---------- Reveal pri skrolu ----------
   var targets = document.querySelectorAll(
-    '.h2, .wall-item, .clip-photo, .svc-list li, .story-text, .visit-block, .visit-map'
+    '.h2, .wall-item, .clip-photo, .svc-list li, .story-text, .visit-block, .visit-map, .link-card, .photo, .cta-panel'
   );
   if (!reduceMotion && 'IntersectionObserver' in window) {
     targets.forEach(function (el) { el.classList.add('reveal'); });

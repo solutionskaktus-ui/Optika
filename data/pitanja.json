@@ -1,0 +1,69 @@
+{
+ "_napomena": "Pitanja i odgovori sa starog sajta. Posle izmene pokrenuti: python3 tools/stranice.py",
+ "pitanja": [
+  [
+   "Kako funkcioniše provera dioptrije u Optici Visage?",
+   "Provera dioptrije je uračunata u cenu kompletnih naočara: radimo je kada birate naočare iz naše ponude ili kada ugrađujemo naša stakla u Vaš okvir. Provera traje oko 15 minuta i obavlja je naš stručni tim. Vaša dioptrija se nakon izrade ispisuje na kesici uz naočare."
+  ],
+  [
+   "Koliko traje provera dioptrije?",
+   "Provera dioptrije traje oko 15 minuta. Obavlja je naš stručni tim savremenom opremom, bez žurbe i sa pravim savetom."
+  ],
+  [
+   "Koliko se čeka da se izrade naočare?",
+   "Izrada naočara traje 1 do 5 dana, u zavisnosti od složenosti dioptrije i vrste stakala. Javljamo Vam se pozivom čim su gotove."
+  ],
+  [
+   "Da li mogu da donesem recept od drugog lekara?",
+   "Da, prihvatamo recepte od svih oftalmologa i optometrista. Donesite recept i mi radimo izradu po Vašoj specifikaciji."
+  ],
+  [
+   "Koliko košta okvir za naočare?",
+   "Cene okvira se kreću od 1.000 do 20.000 dinara. Prosečna cena kompletnih naočara (okvir + stakla) je oko 9.000 dinara, uz uračunatu proveru dioptrije."
+  ],
+  [
+   "Koje brendove kontaktnih sočiva imate?",
+   "Radimo sa proverenim brendovima: Bausch+Lomb, Alcon, Leda i Cooper Vision. Pomoći ćemo Vam da odaberete pravi tip sočiva za Vaše potrebe i životni stil."
+  ],
+  [
+   "Da li imate dečje naočare?",
+   "Da, imamo poseban asortiman dečjih okvira, uključujući fleksibilne (flexi) okvire koji su otporniji na deformacije."
+  ],
+  [
+   "Mogu li u svoj okvir ugraditi sunčana stakla?",
+   "Da, ugrađujemo tonirana sunčana stakla u Vaš okvir, sa ili bez dioptrije. Jedan okvir tako postaje dve naočare za različite prilike."
+  ],
+  [
+   "Imate li parking i kako da dođem do Vas?",
+   "Parking je dostupan ispred TC Medaković 3. Linije gradskog prevoza koje stižu na okretnicu: 29, 18, 18N, 20, 26L, 26Na, 29N, 312."
+  ],
+  [
+   "Da li primate platne kartice i čekove?",
+   "Da, primamo gotovinu, platne i kreditne kartice, čekove i prodaju na rate."
+  ],
+  [
+   "Gde na Voždovcu možete kupiti kontaktna sočiva?",
+   "Kontaktna sočiva možete kupiti kod nas, u Optici Visage u TC Medaković 3 na Voždovcu. Radimo sa proverenim brendovima Bausch+Lomb, Alcon, Leda i Cooper Vision, i pomažemo Vam da izaberete tip sočiva koji odgovara Vašim potrebama."
+  ],
+  [
+   "Da li je provera dioptrije besplatna?",
+   "Proveru dioptrije ne naplaćujemo posebno kada kod nas kupujete naočare, jer je uračunata u cenu kompletnih naočara. Ako ne kupujete naočare kod nas, javite nam se telefonom ili preko Vibera da proverimo uslove za Vaš slučaj."
+  ],
+  [
+   "Da li radite nedeljom?",
+   "Ne, nedeljom smo zatvoreni. Radno vreme je ponedeljkom do petkom od 10 do 18 časova, i subotom od 9 do 14 časova."
+  ],
+  [
+   "Da li kod vas radi lekar, ili proveru dioptrije radi neko drugi?",
+   "Optika Visage je optičarska radnja: proveru dioptrije kod nas radi naš stručni tim, ne lekar na licu mesta. Ako već imate recept spolja, rado ga prihvatamo i izrađujemo naočare tačno po njemu."
+  ],
+  [
+   "Da li treba da zakažem termin za proveru dioptrije?",
+   "Zakazivanje nije obavezno, možete doći direktno u radnju. Ako želite da izbegnete čekanje, slobodno nas pozovite ili pišite na Viber pre dolaska, pa se dogovorimo za termin koji Vam odgovara."
+  ],
+  [
+   "Koja je tačna adresa Optike Visage?",
+   "Nalazimo se na adresi Braće Srnić 23a, u TC Medaković 3, na srednjem ulazu, lokal 45."
+  ]
+ ]
+}
