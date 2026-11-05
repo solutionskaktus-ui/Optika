@@ -143,13 +143,13 @@
   <!-- PRIVREMENO: dok podstranice (okviri/, usluge/, o-nama/, kontakt/) ne budu gotove, linkovi vode na sekcije ove stranice. -->
   <!-- ============ HERO ============
        Pozadina je zamućena kao kod -5,00 dioptrije i izoštrava se na skrol (20 koraka po 0,25).
-       data-effect="1": fotografija radnje.  data-effect="8": tablica za vid.
+       data-effect="8": tablica za vid (izabrano).  data-effect="1": fotografija radnje; tada vratiti fetchpriority="high" i ukloniti loading="lazy" sa #hero-photo.
        Nivoi zamućenja se prave skriptom tools/hero-zamucenje.py. -->
-  <section class="hero" id="hero" data-effect="1" aria-labelledby="hero-title">
+  <section class="hero" id="hero" data-effect="8" aria-labelledby="hero-title">
     <div class="hero-bg" aria-hidden="true">
       <picture class="hero-photo">
         <source media="(orientation: portrait)" srcset="images/hero/hero-p-20.webp">
-        <img id="hero-photo" src="images/hero/hero-d-20.webp" alt="" width="1920" height="1200" fetchpriority="high" decoding="async">
+        <img id="hero-photo" src="images/hero/hero-d-20.webp" alt="" width="1920" height="1200" loading="lazy" decoding="async">
       </picture>
       <div class="hero-chart">
         <span style="--s:1">E</span><span style="--s:.68">F P</span><span style="--s:.5">T O Z</span><span style="--s:.38">L P E D</span>

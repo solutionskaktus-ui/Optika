@@ -129,6 +129,7 @@
 
       // učitaj ostale nivoe zamućenja u pozadini, samo za trenutnu orijentaciju ekrana
       var preload = function () {
+        if (hero.dataset.effect === '8') return; // tablica za vid ne koristi fotografije
         var tag = window.matchMedia('(orientation: portrait)').matches ? 'p' : 'd';
         for (var i = STEPS - 1; i >= 0; i--) { var im = new Image(); im.decoding = 'async'; im.src = heroSrc(tag, i); }
       };
