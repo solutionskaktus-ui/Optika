@@ -183,8 +183,16 @@ p { color: var(--ink-soft); }
   font-weight: 700; color: var(--violet-400); opacity: .34;
   -webkit-mask-image: linear-gradient(180deg, transparent 12%, #000 30%, #000 70%, transparent 88%);
           mask-image: linear-gradient(180deg, transparent 12%, #000 30%, #000 70%, transparent 88%);
-  filter: blur(calc(var(--d) * 2.2px));
 }
+/* tri sloja iste tablice sa stalnim zamućenjem; main.js pretapa njihovu providnost (glatko i lako za telefon) */
+.chart-layer {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2.6vh;
+  will-change: opacity;
+}
+.chart-layer--a { opacity: var(--wa, 0); }
+.chart-layer--b { opacity: var(--wb, 0); filter: blur(4px); }
+.chart-layer--c { opacity: var(--wc, 1); filter: blur(10px); }
 .hero-chart span { font-size: calc(var(--s) * 19vh); line-height: 1; letter-spacing: .3em; margin-right: -.3em; white-space: nowrap; }
 .hero[data-effect="8"] .hero-photo, .hero[data-effect="8"] .hero-wash { display: none; }
 .hero[data-effect="8"] .hero-chart { display: flex; }
@@ -195,16 +203,19 @@ p { color: var(--ink-soft); }
 /* dioptrija: oznaka, vrednost i skala odmah ispod headera */
 .dpt { display: flex; flex-direction: column; }
 .dpt-label { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
-.dpt-val { align-self: flex-end; margin-top: 8px; font-family: var(--font-num); font-weight: 600; color: var(--violet); font-size: 40px; line-height: .8; font-variant-numeric: tabular-nums; }
+.dpt-label { font-size: 11px; }
+.dpt-val { align-self: flex-end; margin-top: 6px; font-family: var(--font-num); font-weight: 600; color: var(--violet); font-size: 28px; line-height: .8; font-variant-numeric: tabular-nums; }
 .dpt-scale {
-  position: relative; height: 22px; margin-top: 10px;
+  position: relative; height: 14px; margin-top: 8px;
   background:
-    linear-gradient(var(--ink), var(--ink)) 0 100% / 100% 1.5px no-repeat,
-    repeating-linear-gradient(90deg, var(--ink) 0 1.5px, transparent 1.5px calc(100% / 20)) 0 100% / calc(100% + 1.5px) 6px no-repeat,
-    repeating-linear-gradient(90deg, var(--ink) 0 1.5px, transparent 1.5px calc(100% / 5)) 0 100% / calc(100% + 1.5px) 11px no-repeat;
+    linear-gradient(var(--ink), var(--ink)) 0 100% / 100% 1.25px no-repeat,
+    repeating-linear-gradient(90deg, var(--ink) 0 1.25px, transparent 1.25px calc(100% / 20)) 0 100% / calc(100% + 1.25px) 4px no-repeat,
+    repeating-linear-gradient(90deg, var(--ink) 0 1.25px, transparent 1.25px calc(100% / 5)) 0 100% / calc(100% + 1.25px) 8px no-repeat;
 }
-.dpt-marker { position: absolute; bottom: 0; left: calc(var(--p) * (100% - 4px)); width: 4px; height: 22px; background: var(--violet); }
-.dpt-ticks { display: flex; justify-content: space-between; font-family: var(--font-num); font-size: 14px; font-weight: 500; margin-top: 4px; }
+/* oznaka se pomera transformacijom (bez ponovnog računanja rasporeda), pa klizi glatko */
+.dpt-marker { position: absolute; bottom: 0; left: 0; width: calc(100% - 3px); height: 14px; transform: translateX(calc(var(--p) * 100%)); will-change: transform; }
+.dpt-marker::before { content: ''; position: absolute; left: 0; bottom: 0; width: 3px; height: 100%; background: var(--violet); }
+.dpt-ticks { display: flex; justify-content: space-between; font-family: var(--font-num); font-size: 12px; font-weight: 500; margin-top: 3px; }
 
 .hero-main {
   flex: 1;
@@ -235,8 +246,8 @@ p { color: var(--ink-soft); }
 .hero-call-inline, .hero-hours { display: none; }
 
 .hero-foot { text-align: center; }
-.hero-place { font-size: 30px; font-weight: 600; letter-spacing: -.015em; line-height: .95; color: var(--violet); }
-.hero-addr { font-size: 15px; color: var(--ink); margin-top: 2px; }
+.hero-place { font-size: 22px; font-weight: 600; letter-spacing: -.01em; line-height: 1; color: var(--violet); }
+.hero-addr { font-size: 14px; color: var(--ink); margin-top: 2px; }
 .hero-call { width: 100%; margin-top: 16px; }
 
 /* niski telefoni (npr. 375x667): manji naslov i razmaci, da sve stane na prvi ekran */
@@ -246,14 +257,14 @@ p { color: var(--ink-soft); }
   .ht-2 { font-size: calc(20.2 * min(1cqi, .38svh)); }
   .ht-3 { font-size: calc(18.4 * min(1cqi, .38svh)); }
   .hero-desc { margin-top: 10px; font-size: 15px; }
-  .hero-place { font-size: 26px; }
+  .hero-place { font-size: 20px; }
   .hero-call { margin-top: 12px; min-height: 46px; }
   .hero-inner { padding-bottom: 16px; }
 }
 
 /* desktop: naslov u dva reda, oba dugmeta uz tekst, dole traka lokacija + radno vreme */
 @media (min-width: 900px) {
-  .dpt-val { font-size: 56px; }
+  .dpt-val { font-size: 40px; }
   .hero-main { padding: 36px 0 28px; }
   .ht { display: inline; }
   .ht-1, .ht-pair { font-size: 6.2vw; font-size: min(7.6cqi, 12svh); }
@@ -265,8 +276,8 @@ p { color: var(--ink-soft); }
   .hero-call-inline { display: inline-flex; min-height: 46px; padding: 0 24px; font-size: 16px; }
   .hero-call { display: none; }
   .hero-foot { display: flex; justify-content: space-between; align-items: flex-end; text-align: left; padding-top: 20px; border-top: 1.5px solid rgba(36, 16, 44, .7); }
-  .hero-place { font-size: 34px; }
-  .hero-addr { font-size: 17px; margin-top: 4px; }
+  .hero-place { font-size: 26px; }
+  .hero-addr { font-size: 15px; margin-top: 3px; }
   .hero-hours { display: block; text-align: right; font-size: 16px; line-height: 1.45; color: var(--ink); }
   .hero-hours b { font-weight: 700; }
   .hero-hours p { color: var(--ink); }

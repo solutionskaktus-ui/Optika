@@ -66,7 +66,6 @@
     var STEPS = 20;
     var dptVal = document.getElementById('dpt-val');
     var lastStep = -1;
-    var heroTicking = false;
 
     var heroSrc = function (tag, step) {
       return 'images/hero/hero-' + tag + '-' + (step < 10 ? '0' : '') + step + '.webp';
@@ -102,30 +101,47 @@
       im.src = heroSrc(orient(), step);
       if (im.decode) im.decode().then(reveal, reveal); else im.onload = reveal;
     };
-    var setStep = function (step) {
+    var MAX_D = STEPS * 0.25;
+    var chartStyle = hero.style;
+    // vrednost dioptrije se menja glatko; brojač i fotografije prate korake po 0,25
+    var applyD = function (d) {
+      chartStyle.setProperty('--d', d.toFixed(3));
+      // pretapanje tri sloja tablice: oštar (a), blago zamućen (b), jako zamućen (c)
+      var wa, wb, wc;
+      if (d <= 2) { wa = 1 - d / 2; wb = d / 2; wc = 0; }
+      else { wa = 0; wb = 1 - (d - 2) / (MAX_D - 2); wc = (d - 2) / (MAX_D - 2); }
+      chartStyle.setProperty('--wa', wa.toFixed(3));
+      chartStyle.setProperty('--wb', wb.toFixed(3));
+      chartStyle.setProperty('--wc', wc.toFixed(3));
+      var step = Math.round(d * 4);
       if (step === lastStep) return;
       lastStep = step;
-      var d = step * 0.25;
-      hero.style.setProperty('--d', String(d));
-      dptVal.textContent = step === 0 ? '0,00' : '\u2212' + d.toFixed(2).replace('.', ',');
+      dptVal.textContent = step === 0 ? '0,00' : '−' + (step / 4).toFixed(2).replace('.', ',');
       if (hero.dataset.effect !== '8') showPhoto(step);
     };
 
     if (reduceMotion) {
-      setStep(0);
+      applyD(0);
     } else {
-      var renderHero = function () {
-        heroTicking = false;
+      var targetD = MAX_D, curD = MAX_D, running = false;
+      var readTarget = function () {
         var dist = hero.offsetHeight * 0.4;
         var p = dist > 0 ? Math.min(1, Math.max(0, window.scrollY / dist)) : 1;
-        setStep(Math.round((1 - p) * STEPS));
+        targetD = (1 - p) * MAX_D;
       };
-      var requestHero = function () {
-        if (!heroTicking) { heroTicking = true; requestAnimationFrame(renderHero); }
+      var tick = function () {
+        var diff = targetD - curD;
+        curD = Math.abs(diff) < 0.003 ? targetD : curD + diff * 0.22;
+        applyD(curD);
+        if (curD !== targetD) requestAnimationFrame(tick); else running = false;
       };
-      window.addEventListener('scroll', requestHero, { passive: true });
-      window.addEventListener('resize', requestHero);
-      renderHero();
+      var onScroll = function () {
+        readTarget();
+        if (!running) { running = true; requestAnimationFrame(tick); }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      readTarget(); curD = targetD; applyD(curD);
 
       // učitaj ostale nivoe zamućenja u pozadini, samo za trenutnu orijentaciju ekrana
       var preload = function () {
