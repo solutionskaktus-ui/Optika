@@ -425,6 +425,61 @@ p { color: var(--ink-soft); }
 .wall-item.is-hidden { display: none; }
 .katalog-note { text-align: center; font-size: 15px; max-width: 52ch; margin: 0 auto; }
 
+/* galerija okvira (sajt bez prodavnice) */
+.gal { padding-top: clamp(24px, 4vw, 48px); }
+.gal .seg--filter { margin-bottom: 16px; }
+.gal-list { margin-top: clamp(28px, 4vw, 44px); }
+.gal-model { padding: clamp(40px, 6vw, 72px) 0; border-top: 1px solid var(--line); }
+.gal-model.is-hidden { display: none; }
+.gal-name { font-size: clamp(26px, 3.2vw, 38px); font-weight: 800; letter-spacing: -.02em; line-height: 1.08; text-align: center; text-wrap: balance; }
+.gal-sub { text-align: center; margin: 6px auto clamp(20px, 3vw, 32px); }
+.gal-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.gal-grid li:first-child { grid-column: 1 / -1; }
+.gal-grid--1 { grid-template-columns: 1fr; max-width: 640px; margin-inline: auto; }
+.gal-item { display: block; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--r-soft); background: #ECECEE; cursor: zoom-in; }
+.gal-item img { width: 100%; height: 100%; object-fit: contain; transition: transform .45s var(--ease); }
+.gal-item:hover img { transform: scale(1.04); }
+.gal-item:focus-visible { outline: 3px solid var(--violet); outline-offset: 3px; }
+.gal-desc { max-width: 62ch; margin: clamp(20px, 3vw, 28px) auto 0; text-align: center; text-wrap: pretty; }
+.gal-ask { text-align: center; margin-top: 10px; }
+@media (min-width: 760px) {
+  .gal-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .gal-grid li:first-child { grid-column: span 2; grid-row: span 2; }
+  .gal-grid--1 { grid-template-columns: 1fr; }
+}
+.gal-radnja { border-top: 1px solid var(--line); }
+.radnja-grid { columns: 2; column-gap: 8px; }
+.radnja-item { display: block; margin-bottom: 8px; break-inside: avoid; overflow: hidden; border-radius: var(--r-soft); background: var(--lilac-100); cursor: zoom-in; }
+.radnja-item img { width: 100%; height: auto; transition: transform .45s var(--ease); }
+.radnja-item:hover img { transform: scale(1.03); }
+.radnja-item:focus-visible { outline: 3px solid var(--violet); outline-offset: 3px; }
+@media (min-width: 760px) {
+  .radnja-grid { columns: 3; column-gap: 12px; }
+  .radnja-item { margin-bottom: 12px; }
+}
+.photos-more { margin-top: 24px; }
+
+/* fotografija preko celog ekrana */
+html.lb-open { overflow: hidden; }
+.lb { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: var(--lilac-50); color: var(--ink); }
+.lb[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+.lb::backdrop { background: var(--lilac-50); }
+.lb-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; }
+.lb-count { font-family: var(--font-num); font-size: 20px; font-weight: 500; color: var(--ink-soft); min-height: 1em; }
+.lb-close { min-height: 44px; padding: 0 18px; }
+.lb-fig { margin: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; padding: 0 16px; }
+.lb-img { width: 100%; height: 100%; min-height: 0; object-fit: contain; }
+.lb-cap { text-align: center; padding-top: 12px; font-size: 15px; color: var(--ink-soft); text-wrap: balance; }
+.lb-nav { display: flex; justify-content: center; gap: 12px; padding: 12px 16px calc(16px + env(safe-area-inset-bottom)); }
+.lb-btn { display: grid; place-items: center; width: 56px; height: 48px; border-radius: var(--r-btn); background: var(--white); color: var(--violet); box-shadow: inset 0 0 0 1.5px var(--lilac-200); cursor: pointer; transition: box-shadow .2s var(--ease); }
+.lb-btn:hover { box-shadow: inset 0 0 0 1.5px var(--violet); }
+.lb-btn[hidden] { display: none; }
+@media (min-width: 900px) {
+  .lb-fig { padding: 0 96px; }
+  .lb-nav { position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%); justify-content: space-between; padding: 0 24px; pointer-events: none; }
+  .lb-btn { pointer-events: auto; }
+}
+
 /* stranica modela */
 .model { padding-bottom: clamp(56px, 8vw, 104px); }
 .model-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(24px, 4vw, 64px); align-items: start; }

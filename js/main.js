@@ -176,7 +176,7 @@
   if (katalog) {
     var fBtns = document.querySelectorAll('[data-filter]');
     var applyFilter = function (f) {
-      katalog.querySelectorAll('.wall-item').forEach(function (it) {
+      katalog.querySelectorAll('.wall-item, .gal-model').forEach(function (it) {
         var tags = (it.getAttribute('data-filteri') || '').split(' ');
         it.classList.toggle('is-hidden', f !== 'svi' && tags.indexOf(f) === -1);
       });
@@ -195,6 +195,67 @@
     });
     var h = location.hash.slice(1);
     if (h && document.querySelector('[data-filter="' + h + '"]')) applyFilter(h);
+  }
+
+  // ---------- Galerija: fotografija preko celog ekrana ----------
+  var lb = document.getElementById('lb');
+  if (lb && typeof lb.showModal === 'function') {
+    var lbImg = lb.querySelector('.lb-img');
+    var lbCap = lb.querySelector('.lb-cap');
+    var lbCount = lb.querySelector('.lb-count');
+    var lbPrev = lb.querySelector('.lb-prev');
+    var lbNext = lb.querySelector('.lb-next');
+    var group = [], idx = 0, opener = null;
+    var preload = function (a) { if (a) { var im = new Image(); im.src = a.getAttribute('href'); } };
+    var show = function (i) {
+      idx = (i + group.length) % group.length;
+      var a = group[idx];
+      var cap = a.getAttribute('data-cap') || '';
+      lbImg.src = a.getAttribute('href');
+      lbImg.alt = cap;
+      lbCap.textContent = cap;
+      var multi = group.length > 1;
+      lbCount.textContent = multi ? (idx + 1) + ' / ' + group.length : '';
+      lbPrev.hidden = !multi;
+      lbNext.hidden = !multi;
+      if (multi) { preload(group[(idx + 1) % group.length]); preload(group[(idx - 1 + group.length) % group.length]); }
+    };
+    document.querySelectorAll('[data-lb]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        group = Array.prototype.slice.call(document.querySelectorAll('[data-lb="' + a.getAttribute('data-lb') + '"]'));
+        opener = a;
+        show(group.indexOf(a));
+        document.documentElement.classList.add('lb-open');
+        lb.showModal();
+      });
+    });
+    lbPrev.addEventListener('click', function () { show(idx - 1); });
+    lbNext.addEventListener('click', function () { show(idx + 1); });
+    var cleanup = function () {
+      if (!document.documentElement.classList.contains('lb-open')) return;
+      document.documentElement.classList.remove('lb-open');
+      lbImg.removeAttribute('src');
+      if (opener) opener.focus({ preventScroll: true });
+    };
+    var closeLb = function () { if (lb.open) lb.close(); cleanup(); };
+    lb.querySelector('.lb-close').addEventListener('click', closeLb);
+    lb.addEventListener('close', cleanup); // Esc zatvara sam dijalog
+    lb.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); show(idx - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); show(idx + 1); }
+    });
+    // klik pored fotografije zatvara
+    lb.addEventListener('click', function (e) { if (e.target === lb || e.target.classList.contains('lb-fig')) closeLb(); });
+    // prevlačenje prstom levo/desno
+    var x0 = null, y0 = null;
+    lb.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    lb.addEventListener('touchend', function (e) {
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+      x0 = null;
+      if (group.length > 1 && Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(idx + (dx < 0 ? 1 : -1));
+    });
   }
 
   // ---------- Stranica modela: galerija ----------

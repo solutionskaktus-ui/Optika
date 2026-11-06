@@ -1,8 +1,10 @@
 """
 Generator podstranica sajta Optika Visage.
 
-Pravi: okviri/ (katalog i stranica za svaki model), usluge/ (pregled i 4 usluge),
-o-nama/, kontakt/, pitanja/ i sitemap.xml. Početna (index.html) se uređuje ručno.
+Pravi: okviri/, usluge/ (pregled i 4 usluge), o-nama/, kontakt/, pitanja/, korpa/,
+zid sa okvirima na početnoj i sitemap.xml. Ostatak početne (index.html) se uređuje ručno.
+Sa PRODAVNICA = True okviri/ je katalog sa stranicom za svaki model i korpom;
+sa PRODAVNICA = False okviri/ je galerija, a adrese modela i korpe vode na nju.
 
 Podaci o okvirima su u data/okviri.json, pitanja u data/pitanja.json.
 Posle izmene teksta ili dodavanja okvira pokrenuti iz korena repoa:
@@ -24,7 +26,12 @@ MAPS_REVIEWS = ('https://www.google.com/maps/place/Optika+Visage/@44.7726675,20.
                 'data=!4m6!3m5!1s0x475a716f32d1f9cb:0xbde644c80bc34fa!8m2!3d44.7727127!4d20.5079659')
 ARROW = ''
 
-OKVIRI = json.loads((ROOT / 'data' / 'okviri.json').read_text(encoding='utf-8'))['okviri']
+# Prodavnica: korpa, cene okvira i posebna stranica za svaki model.
+# Kada je isključena, /okviri/ je galerija sa svim fotografijama, a adrese
+# modela (/okviri/<slug>/) i korpe vode na galeriju. Puna verzija je na grani `prodavnica`.
+PRODAVNICA = False
+
+OKVIRI =json.loads((ROOT / 'data' / 'okviri.json').read_text(encoding='utf-8'))['okviri']
 PITANJA = json.loads((ROOT / 'data' / 'pitanja.json').read_text(encoding='utf-8'))['pitanja']
 
 POGLED = {
@@ -34,6 +41,9 @@ POGLED = {
     'clip-on-profil': 'sa clip-on staklom, sa strane', 'clip-on-pored': 'sa clip-on staklom pored okvira',
     'clip-on-podignut': 'sa podignutim clip-on staklom', 'futrola': 'na Tony Morgan futroli',
     'futrola-otvorena-1': 'u otvorenoj Tony Morgan futroli sa krpicom',
+    'futrola-otvorena-2': 'u otvorenoj Tony Morgan futroli',
+    'futrola-otvorena-3': 'ispred otvorene Tony Morgan futrole',
+    'futrola-otvorena-4': 'na krpici ispred Tony Morgan futrole',
 }
 
 
@@ -68,12 +78,13 @@ def kartica(o, sizes='(max-width: 1020px) 50vw, 25vw'):
     else:
         main = img(okvir_img_base(o, o.get('kartica', 'spreda')), o['ime'], 800, 600, sizes)
         alt = ''
+    href = f'/okviri/{o["slug"]}/' if PRODAVNICA else f'/okviri/#{o["slug"]}'
     return (f'        <li class="wall-item" data-filteri="{" ".join(o["filteri"])}">\n'
-            f'          <a href="/okviri/{o["slug"]}/">\n'
+            f'          <a href="{href}">\n'
             f'            <span class="wall-img wall-img--studio">{main}{alt}</span>\n'
             f'            <span class="wall-name">{escape(o["kratko"])}</span>\n'
             f'            <span class="wall-cat">{escape(o["tip"])}</span>\n'
-            + (f'            <span class="wall-price">{rsd(o["cena"])}</span>\n' if o.get('cena') else '')
+            + (f'            <span class="wall-price">{rsd(o["cena"])}</span>\n' if PRODAVNICA and o.get('cena') else '')
             + f'          </a>\n        </li>')
 
 
@@ -149,8 +160,7 @@ def nav(active):
       <a href="tel:{TEL}" class="nav-tel">{TEL_TXT}</a>
       <a href="{VIBER}" class="btn btn-primary nav-cta">Zakažite proveru</a>
     </nav>
-    <a href="/korpa/" class="nav-cart" aria-label="Korpa" hidden>{CART_SVG}<span class="nav-cart-n">0</span></a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">Meni</button>
+{f'    <a href="/korpa/" class="nav-cart" aria-label="Korpa" hidden>{CART_SVG}<span class="nav-cart-n">0</span></a>' + chr(10) if PRODAVNICA else ''}    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">Meni</button>
   </div>
 </header>
 '''
@@ -238,7 +248,122 @@ def write(path, html):
     return path
 
 
+def preusmeri(path, target, title):
+    """Mala stranica koja staru adresu odmah vodi na novu (GitHub Pages nema preusmeravanja)."""
+    write(path, f'''<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{escape(title)} | Optika Visage</title>
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="{SITE}/okviri/">
+<meta http-equiv="refresh" content="0; url={target}">
+<script>location.replace('{target}');</script>
+</head>
+<body>
+<p><a href="{target}">{escape(title)}</a></p>
+</body>
+</html>
+''')
+
+
+# ---------------------------------------------------------------- galerija (bez prodavnice)
+
+LB_SVG = ('<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" '
+          'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{d}"/></svg>')
+LIGHTBOX = f'''
+<dialog class="lb" id="lb" aria-label="Fotografija">
+  <div class="lb-top">
+    <p class="lb-count" aria-live="polite"></p>
+    <button type="button" class="btn btn-line lb-close">Zatvori</button>
+  </div>
+  <figure class="lb-fig">
+    <img class="lb-img" alt="">
+    <figcaption class="lb-cap"></figcaption>
+  </figure>
+  <div class="lb-nav">
+    <button type="button" class="lb-btn lb-prev" aria-label="Prethodna fotografija">{LB_SVG.format(d="m15 5-7 7 7 7")}</button>
+    <button type="button" class="lb-btn lb-next" aria-label="Sledeća fotografija">{LB_SVG.format(d="m9 5 7 7-7 7")}</button>
+  </div>
+</dialog>
+'''
+
+
+def gal_model(o):
+    views = o.get('galerija', o['pogledi'])
+    items = ''
+    for i, v in enumerate(views):
+        b = okvir_img_base(o, v)
+        cap = f'{o["ime"]}, {POGLED.get(v, v)}'
+        sizes = '(max-width: 759px) 100vw, 600px' if i == 0 else '(max-width: 759px) 50vw, 300px'
+        items += (f'\n          <li><a class="gal-item" href="{b}-1600.webp" data-lb="{o["slug"]}" data-cap="{escape(cap)}">'
+                  f'<img src="{b}-800.webp" srcset="{b}-800.webp 800w, {b}-1600.webp 1600w" sizes="{sizes}" '
+                  f'alt="{escape(cap)}" width="800" height="600" loading="lazy" decoding="async"></a></li>')
+    one = ' gal-grid--1' if len(views) == 1 else ''
+    return f'''
+    <article class="gal-model" id="{o["slug"]}" data-filteri="{" ".join(o["filteri"])}" aria-labelledby="{o["slug"]}-ime">
+      <div class="container">
+        <h2 class="gal-name" id="{o["slug"]}-ime">{escape(o["ime"])}</h2>
+        <p class="gal-sub">{escape(o.get("podnaslov", o["tip"]))}</p>
+        <ul class="gal-grid{one}">{items}
+        </ul>
+        <p class="gal-desc">{escape(o["opis"])}</p>
+        <p class="gal-ask"><a class="text-link" href="{VIBER}">Pitajte za ovaj okvir na Viberu</a></p>
+      </div>
+    </article>'''
+
+
+def build_galerija():
+    cr, cs = breadcrumbs([('Početna', '/'), ('Okviri', '/okviri/')])
+    n_clip = sum('clip-on' in o['filteri'] for o in OKVIRI)
+    n_met = sum('metalni' in o['filteri'] for o in OKVIRI)
+    models = '\n'.join(gal_model(o) for o in OKVIRI)
+    photos = ''
+    for f, a, w, h in FOTO_GALERIJA:
+        b = f'/images/radnja/galerija/{f}'
+        w2 = 1600 if w > h else 1200
+        photos += (f'\n        <a class="radnja-item" href="{b}-1600.webp" data-lb="radnja" data-cap="{escape(a)}">'
+                   f'<img src="{b}-800.webp" srcset="{b}-800.webp 800w, {b}-1600.webp {w2}w" '
+                   f'sizes="(max-width: 759px) 50vw, 400px" alt="{escape(a)}" width="{w}" height="{h}" loading="lazy" decoding="async"></a>')
+    html = head('Galerija okvira za naočare | Optika Visage, Voždovac',
+                'Fotografije okvira iz Optike Visage na Medakoviću: Tony Morgan i Kubik clip-on okviri, William Morris i Diva trend. U radnji ima još mnogo modela.',
+                '/okviri/', [cs])
+    html += nav('okviri') + '\n<main id="sadrzaj">\n'
+    html += page_head(cr, 'Galerija okvira',
+                      'Deo okvira sa našeg zida, sa svim fotografijama. U radnji ima još mnogo modela, pa svratite da ih probate.')
+    html += f'''
+  <section class="gal" aria-label="Okviri">
+    <div class="container">
+      <div class="seg seg--filter" role="group" aria-label="Filter okvira">
+        <button type="button" class="seg-btn is-on" data-filter="svi" aria-pressed="true">Svi <span class="seg-n">{len(OKVIRI)}</span></button>
+        <button type="button" class="seg-btn" data-filter="clip-on" aria-pressed="false">Clip-on <span class="seg-n">{n_clip}</span></button>
+        <button type="button" class="seg-btn" data-filter="metalni" aria-pressed="false">Metalni <span class="seg-n">{n_met}</span></button>
+      </div>
+      <p class="katalog-note">Clip-on je dodatno sunčano staklo koje se kači na okvir sa dioptrijom. Imaju ga svi Tony Morgan okviri i Kubik.</p>
+    </div>
+    <div class="gal-list" id="katalog">
+{models}
+    </div>
+  </section>
+
+  <section class="section gal-radnja" id="radnja" aria-labelledby="radnja-title">
+    <div class="container">
+      <h2 class="h2" id="radnja-title">U našoj radnji</h2>
+      <div class="radnja-grid">{photos}
+      </div>
+    </div>
+  </section>
+'''
+    html += cta_panel('Još mnogo modela u radnji',
+                      'Na sajtu je samo deo ponude. Svratite da probate okvire, a ako ne želite da čekate, pozovite ili pišite na Viber.')
+    html += '\n</main>\n' + LIGHTBOX + FOOTER
+    return write('/okviri/', html)
+
+
 def build_katalog():
+    if not PRODAVNICA:
+        return build_galerija()
     cr, cs = breadcrumbs([('Početna', '/'), ('Okviri', '/okviri/')])
     n_clip = sum('clip-on' in o['filteri'] for o in OKVIRI)
     n_met = sum('metalni' in o['filteri'] for o in OKVIRI)
@@ -274,6 +399,9 @@ def build_katalog():
 
 def build_model(o):
     path = f'/okviri/{o["slug"]}/'
+    if not PRODAVNICA:
+        preusmeri(path, f'/okviri/#{o["slug"]}', o['ime'])
+        return None
     cr, cs = breadcrumbs([('Početna', '/'), ('Okviri', '/okviri/'), (o['kratko'], path)])
     views = o['pogledi']
     first = okvir_img_base(o, views[0])
@@ -528,6 +656,18 @@ FOTO_RADNJA = [
     ('radnja-posteri-oka', 'Posteri sa prikazom oka na zidu radnje'),
 ]
 
+# Galerija radnje na /okviri/: cele fotografije (bez isecanja), širina i visina verzije od 800 px.
+FOTO_GALERIJA = [
+    ('radnja-visage-zid-i-pult', 'Zid sa Visage slovima i pult u radnji Optika Visage', 800, 600),
+    ('radnja-zid-sa-okvirima', 'Okviri na šipkama i posteri na zidu radnje', 800, 1066),
+    ('radnja-paneli-sa-okvirima', 'Dva panela sa okvirima i ogledalo između njih', 800, 1066),
+    ('radnja-zid-sa-okvirima-2', 'Zid sa okvirima i futrolama u radnji', 800, 600),
+    ('radnja-stalak-kod-izloga', 'Stalak sa naočarama kod izloga radnje', 800, 1066),
+    ('radnja-tester-suncanih-stakala', 'Tester sunčanih stakala u radnji', 800, 1066),
+    ('radnja-decji-okvir-barbie', 'Roze Barbie dečji okvir uz roze Barbie futrolu', 800, 1066),
+    ('radnja-posteri-oka', 'Posteri sa prikazom oka na zidu radnje', 800, 1066),
+]
+
 
 def build_o_nama():
     cr, cs = breadcrumbs([('Početna', '/'), ('O nama', '/o-nama/')])
@@ -553,7 +693,7 @@ def build_o_nama():
       <h2 class="h2" id="radnja-foto-title">U našoj radnji</h2>
       <div class="photo-grid">
 {photos}
-      </div>
+      </div>{"" if PRODAVNICA else chr(10) + '      <p class="center photos-more"><a class="text-link" href="/okviri/#radnja">Još fotografija radnje</a></p>'}
     </div>
   </section>
 '''
@@ -652,6 +792,9 @@ def build_pitanja():
 
 
 def build_korpa():
+    if not PRODAVNICA:
+        preusmeri('/korpa/', '/okviri/', 'Okviri')
+        return
     cr, cs = breadcrumbs([('Početna', '/'), ('Korpa', '/korpa/')])
     opts = ''.join(f'<option>{escape(x)}</option>' for x in STAKLA)
     def eye(side, label):
@@ -770,7 +913,7 @@ def build_sitemap(paths):
 
 def main():
     paths = [build_katalog()]
-    paths += [build_model(o) for o in OKVIRI]
+    paths += [p for p in (build_model(o) for o in OKVIRI) if p]
     paths += build_usluge()
     paths += [build_o_nama(), build_kontakt(), build_pitanja()]
     build_korpa()

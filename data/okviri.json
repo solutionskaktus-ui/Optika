@@ -145,6 +145,20 @@
         "clip-on-pored",
         "futrola-otvorena-1"
       ],
+      "galerija": [
+        "spreda",
+        "poluprofil",
+        "profil",
+        "clip-on-spreda",
+        "clip-on-poluprofil",
+        "clip-on-profil",
+        "clip-on-pored",
+        "futrola",
+        "futrola-otvorena-1",
+        "futrola-otvorena-2",
+        "futrola-otvorena-3",
+        "futrola-otvorena-4"
+      ],
       "par": true,
       "slike": "tony-morgan-cat-eye",
       "podnaslov": "Clip-on okvir, tamnoplavi cat-eye",
@@ -214,6 +228,16 @@
       ],
       "pogledi": [
         "spreda",
+        "poluprofil",
+        "profil",
+        "clip-on-spreda",
+        "clip-on-poluprofil",
+        "clip-on-profil",
+        "futrola"
+      ],
+      "galerija": [
+        "spreda",
+        "spreda-2",
         "poluprofil",
         "profil",
         "clip-on-spreda",
