@@ -588,7 +588,9 @@ p { color: var(--ink-soft); }
   .cart-item { grid-template-columns: 88px 1fr; }
   .cart-img { width: 88px; }
   .cart-remove { grid-column: 1 / -1; justify-self: end; }
-  .rx-row { grid-template-columns: repeat(3, 1fr); }
+  .rx { padding: 14px; }
+  .rx-row { grid-template-columns: repeat(3, 1fr); column-gap: 6px; }
+  .rx input { padding-left: 8px; padding-right: 8px; }
   .rx-eye { grid-column: 1 / -1; padding-bottom: 0; }
   .rx-row--extra { grid-template-columns: 1fr 1fr; }
   .rx-row--extra::before { display: none; }
