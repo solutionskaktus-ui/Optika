@@ -51,6 +51,18 @@ MODELI = {
 # crni sjajni cat-eye na futroli (folder 6) je po izgledu isti model kao folder 11
 DODATNO = {'crni-cat-eye-acetat': ('6', {'futrola': '79'})}
 
+# Kartica po prednjem delu okvira (x0, y0, x1, y1 na fotografiji spreda od 2400 px), za modele
+# kod kojih automatski izrez ne uspeva (tanki metalni okviri, okvir skoro preko cele fotografije).
+# Kartica tada stoji isto kao poravnati parovi clip-on okvira: okvir zauzima 79% širine,
+# a donja ivica okvira je na 75,5% visine, pa svi okviri na zidu stoje na istoj liniji.
+KARTICA_PREDNJI = {
+    'william-morris': (120, 504, 2250, 1305),
+    'diva-trend-roze-zlatni': (114, 375, 2295, 1146),
+    'diva-trend-zlatni': (246, 735, 2040, 1320),
+}
+PREDNJI_SIRINA, PREDNJI_DNO = .79, .755
+PORAVNAT_DNO = .70  # velika fotografija 4:3 u galeriji: donja ivica okvira na 70% visine
+
 
 def lift(im):
     a = np.asarray(im.convert('RGB'), dtype=np.float64)
@@ -129,6 +141,57 @@ def frame_box_85(a):
     return (round(cx - cw / 2), round(cy - ch / 2), round(cx + cw / 2), round(cy + ch / 2))
 
 
+def _pad_bg(a, left, right, top, bottom, band=80, smooth=41):
+    """Produži pozadinu: svaki novi red/kolona dobija boju pozadine iz trake uz ivicu.
+    U obzir ulaze samo svetli, sivi pikseli trake, pa se okvir i drške ne razvlače u pruge."""
+    k = np.ones(smooth) / smooth
+    def side(edge):  # edge: (H, band, 3) -> (H, 3) izglađena boja pozadine po redovima
+        sat = edge.max(axis=2) - edge.min(axis=2)
+        ok = (sat < 22) & (edge.mean(axis=2) > 185)
+        m = np.full((edge.shape[0], 3), np.nan)
+        for y in range(edge.shape[0]):
+            px = edge[y][ok[y]]
+            if len(px) >= 10:
+                m[y] = np.median(px, axis=0)
+        i = np.arange(len(m)); good = ~np.isnan(m[:, 0])
+        m = np.stack([np.interp(i, i[good], m[good, c]) for c in range(3)], axis=1)
+        return np.stack([np.convolve(np.pad(m[:, c], smooth // 2, mode='edge'), k, 'valid') for c in range(3)], axis=1)
+    if left:
+        a = np.concatenate([np.repeat(side(a[:, :band])[:, None], left, axis=1), a], axis=1)
+    if right:
+        a = np.concatenate([a, np.repeat(side(a[:, -band:])[:, None], right, axis=1)], axis=1)
+    if top:
+        a = np.concatenate([np.repeat(side(a[:band].transpose(1, 0, 2))[None], top, axis=0), a], axis=0)
+    if bottom:
+        a = np.concatenate([a, np.repeat(side(a[-band:].transpose(1, 0, 2))[None], bottom, axis=0)], axis=0)
+    return a
+
+
+def kartica_po_prednjem(im, front, aspect=8 / 5, dno=PREDNJI_DNO):
+    """Izrez u kome prednji deo okvira stoji kao na poravnatim parovima (vidi KARTICA_PREDNJI).
+    aspect 8/5 je kartica za zid, 4/3 je velika fotografija u galeriji (ista širina okvira, više pozadine)."""
+    x0, y0, x1, y1 = front
+    w = (x1 - x0) / PREDNJI_SIRINA
+    h = w / aspect
+    cx = (x0 + x1) / 2
+    bx = [round(cx - w / 2), round(y1 - dno * h)]
+    bx += [bx[0] + round(w), bx[1] + round(h)]
+    a = np.asarray(im.convert('RGB'), dtype=np.float64)
+    pl, pt = max(0, -bx[0]), max(0, -bx[1])
+    pr, pb = max(0, bx[2] - im.width), max(0, bx[3] - im.height)
+    a = _pad_bg(a, pl, pr, pt, pb)
+    a = a[bx[1] + pt:bx[3] + pt, bx[0] + pl:bx[2] + pl]
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+
+
+def prednji_iz_para(im):
+    """Prednji deo okvira na fotografiji spreda, procenjen iz izreza 8:5 kao kod poravnatih parova."""
+    x0, y0, x1, y1 = frame_box_85(im)
+    w, h = x1 - x0, y1 - y0
+    m = (1 - PREDNJI_SIRINA) / 2
+    return (x0 + m * w, y0 + .3 * h, x1 - m * w, y0 + PREDNJI_DNO * h)
+
+
 def safe_crop(im, bx):
     canvas = Image.new('RGB', (bx[2] - bx[0], bx[3] - bx[1]), tuple(int(v) for v in TARGET))
     canvas.paste(im, (-bx[0], -bx[1]))
@@ -156,11 +219,17 @@ def main():
             save(im, od / f'{model}-{v}')
         if not pair and 'spreda' in views:
             im = cache[views['spreda']]
-            save(safe_crop(im, frame_box_85(im)), od / f'{model}-kartica')
+            if model in KARTICA_PREDNJI:
+                save(kartica_po_prednjem(im, KARTICA_PREDNJI[model]), od / f'{model}-kartica')
+                save(kartica_po_prednjem(im, KARTICA_PREDNJI[model], 4 / 3, PORAVNAT_DNO), od / f'{model}-poravnat')
+            else:
+                save(safe_crop(im, frame_box_85(im)), od / f'{model}-kartica')
         if pair:
             ca, cb, s, off = align_pair(cache[pair[0]], cache[pair[1]])
             save(ca, od / f'{model}-uporedjenje-bez')
             save(cb, od / f'{model}-uporedjenje-sa')
+            a = cache[pair[0]]
+            save(kartica_po_prednjem(a, prednji_iz_para(a), 4 / 3, PORAVNAT_DNO), od / f'{model}-poravnat')
             print(model, 'par: razmera %.2f, pomeraj %.0f,%.0f, preklapanje %.2f' % (s, *off))
         print(model, len(jobs), 'slika')
 

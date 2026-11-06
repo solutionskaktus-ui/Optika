@@ -44,6 +44,7 @@ POGLED = {
     'futrola-otvorena-2': 'u otvorenoj Tony Morgan futroli',
     'futrola-otvorena-3': 'ispred otvorene Tony Morgan futrole',
     'futrola-otvorena-4': 'na krpici ispred Tony Morgan futrole',
+    'poravnat': 'spreda',
 }
 
 
@@ -76,7 +77,8 @@ def kartica(o, sizes='(max-width: 1020px) 50vw, 25vw'):
         alt = (f'<img class="wall-alt" src="{okvir_img_base(o, "uporedjenje-sa")}-800.webp" '
                f'alt="" width="800" height="500" loading="lazy" decoding="async">')
     else:
-        main = img(okvir_img_base(o, o.get('kartica', 'spreda')), o['ime'], 800, 600, sizes)
+        v = o.get('kartica', 'spreda')
+        main = img(okvir_img_base(o, v), o['ime'], 800, 500 if v == 'kartica' else 600, sizes)
         alt = ''
     href = f'/okviri/{o["slug"]}/' if PRODAVNICA else f'/okviri/#{o["slug"]}'
     return (f'        <li class="wall-item" data-filteri="{" ".join(o["filteri"])}">\n'
@@ -291,7 +293,11 @@ LIGHTBOX = f'''
 
 
 def gal_model(o):
-    views = o.get('galerija', o['pogledi'])
+    views = list(o.get('galerija', o['pogledi']))
+    # velika fotografija spreda je poravnata kao na zidu, da svi okviri stoje u istoj ravni
+    poravnat = o.get('par') or ('metalni' in o['filteri'] and o.get('kartica') == 'kartica')
+    if poravnat and views and views[0] == 'spreda':
+        views[0] = 'poravnat'
     items = ''
     for i, v in enumerate(views):
         b = okvir_img_base(o, v)
