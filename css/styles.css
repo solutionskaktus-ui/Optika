@@ -571,6 +571,7 @@ p { color: var(--ink-soft); }
 .rx label span { font-size: 12px; font-weight: 700; letter-spacing: .06em; color: var(--ink-soft); }
 .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .field--wide { grid-column: 1 / -1; }
+.field--note { margin-bottom: 18px; }
 .pickup { margin: 20px 0 14px; padding: 14px 16px; border-radius: 12px; background: var(--lilac-100); font-size: 15px; }
 .pickup strong { display: block; color: var(--ink); }
 .consent { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--ink-soft); margin-bottom: 18px; }

@@ -662,7 +662,7 @@ def build_korpa():
     html = head('Korpa | Optika Visage', 'Pregled izabranih okvira i slanje porudžbine Optici Visage.', '/korpa/', [cs])
     html = html.replace('<meta name="robots" content="index, follow, max-image-preview:large">', '<meta name="robots" content="noindex">')
     html += nav('') + '\n<main id="sadrzaj">\n'
-    html += page_head(cr, 'Korpa', 'Pošaljite porudžbinu, a mi Vam se javljamo da potvrdimo stakla, cenu i termin preuzimanja.')
+    html += page_head(cr, 'Korpa', 'Pošaljite porudžbinu, a mi Vam se javljamo da potvrdimo stakla, cenu i termin dostave ili preuzimanja.')
     html += f'''
   <section class="section cart" aria-label="Korpa">
     <div class="container cart-inner">
@@ -710,9 +710,23 @@ def build_korpa():
           <label class="field"><span>Ime i prezime *</span><input name="ime" required autocomplete="name"></label>
           <label class="field"><span>Telefon *</span><input name="telefon" required type="tel" inputmode="tel" autocomplete="tel"></label>
           <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email"></label>
-          <label class="field field--wide"><span>Napomena</span><textarea name="napomena" rows="3"></textarea></label>
         </div>
-        <p class="pickup"><strong>Preuzimanje u radnji</strong> Braće Srnić 23a, TC Medaković 3, lokal 45. Plaćanje pri preuzimanju: gotovina, kartice, čekovi ili na rate.</p>
+
+        <h2 class="order-h">Dostava ili preuzimanje</h2>
+        <fieldset class="choice" id="ship-choice">
+          <legend class="visually-hidden">Kako želite da dobijete naočare</legend>
+          <label><input type="radio" name="isporuka" value="Dostava na adresu" checked> Dostava na adresu u Beogradu</label>
+          <label><input type="radio" name="isporuka" value="Preuzimanje u radnji"> Preuzimanje u radnji</label>
+        </fieldset>
+        <div class="ship" id="ship-adresa">
+          <div class="fields">
+            <label class="field"><span>Adresa *</span><input name="adresa" autocomplete="street-address" placeholder="ulica, broj, stan"></label>
+            <label class="field"><span>Opština ili naselje *</span><input name="naselje" placeholder="npr. Voždovac"></label>
+          </div>
+          <p class="pickup"><strong>Besplatna dostava</strong> Naočare donosimo na Vašu adresu u Beogradu. Plaćanje pouzećem, gotovinom pri dostavi.</p>
+        </div>
+        <p class="pickup" id="ship-radnja" hidden><strong>Preuzimanje u radnji</strong> Braće Srnić 23a, TC Medaković 3, lokal 45. Plaćanje pri preuzimanju: gotovina, kartice, čekovi ili na rate.</p>
+        <label class="field field--note"><span>Napomena</span><textarea name="napomena" rows="3"></textarea></label>
         <label class="consent"><input type="checkbox" name="saglasnost" required> Saglasan/na sam da Optika Visage koristi moje podatke, uključujući dioptriju, samo radi obrade ove porudžbine. *</label>
         <input type="text" name="_honey" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
         <p class="order-error" id="order-error" role="alert" hidden></p>
@@ -721,7 +735,7 @@ def build_korpa():
 
       <div class="order-done" id="order-done" hidden>
         <h2 class="h2">Hvala, porudžbina je poslata.</h2>
-        <p class="lead center">Javljamo Vam se telefonom da potvrdimo stakla, cenu i termin preuzimanja.</p>
+        <p class="lead center">Javljamo Vam se telefonom da potvrdimo stakla, cenu i termin dostave ili preuzimanja.</p>
         <a href="/okviri/" class="btn btn-glass">Nazad na okvire</a>
       </div>
     </div>

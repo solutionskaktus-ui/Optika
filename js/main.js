@@ -295,6 +295,16 @@
       r.addEventListener('change', function () { rx.hidden = r.value !== 'Upisaću dioptriju' || !r.checked; });
     });
 
+    var shipAdresa = document.getElementById('ship-adresa');
+    var shipRadnja = document.getElementById('ship-radnja');
+    var isDostava = function () {
+      var c = order.querySelector('input[name="isporuka"]:checked');
+      return !c || c.value === 'Dostava na adresu';
+    };
+    var syncShip = function () { var d = isDostava(); shipAdresa.hidden = !d; shipRadnja.hidden = d; };
+    order.querySelectorAll('input[name="isporuka"]').forEach(function (r) { r.addEventListener('change', syncShip); });
+    syncShip();
+
     order.addEventListener('submit', function (e) {
       e.preventDefault();
       err.hidden = true;
@@ -303,6 +313,9 @@
       var missing = [];
       if (!String(f.get('ime') || '').trim()) missing.push('ime i prezime');
       if (!String(f.get('telefon') || '').trim()) missing.push('telefon');
+      var dostava = isDostava();
+      if (dostava && !String(f.get('adresa') || '').trim()) missing.push('adresa');
+      if (dostava && !String(f.get('naselje') || '').trim()) missing.push('opština ili naselje');
       if (!f.get('saglasnost')) missing.push('saglasnost');
       if (missing.length) { err.textContent = 'Popunite: ' + missing.join(', ') + '.'; err.hidden = false; return; }
       var items = cartItems();
@@ -322,8 +335,13 @@
         data['Levo oko (OS)'] = 'SPH ' + v('os_sph') + ', CYL ' + v('os_cyl') + ', AX ' + v('os_ax');
         data['PD'] = v('pd'); data['ADD'] = v('add');
       }
+      if (dostava) {
+        data['Isporuka'] = 'Dostava na adresu, pouzeće (gotovina)';
+        data['Adresa'] = v('adresa') + ', ' + v('naselje') + ', Beograd';
+      } else {
+        data['Isporuka'] = 'Preuzimanje u radnji, TC Medaković 3';
+      }
       data['Napomena'] = v('napomena');
-      data['Preuzimanje'] = 'U radnji, TC Medaković 3';
       if (f.get('email')) data._replyto = f.get('email');
       var btn = order.querySelector('.order-submit');
       btn.disabled = true; btn.textContent = 'Šaljem...';
