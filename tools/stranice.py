@@ -556,7 +556,7 @@ USLUGE = [
         'lead': 'Izrađujemo sve vrste stakala, po proveri dioptrije ili po receptu.',
         'kratko': 'Antirefleks, plavo svetlo, progresivna i fotosenzitivna stakla, i sunčana stakla u Vaš okvir.',
         'blokovi': [
-            ('Antirefleks', 'Sloj na staklu koji smanjuje odsjaj. Uz određene okvire antirefleks dobijate gratis.'),
+            ('Antirefleks', 'Sloj na staklu koji smanjuje odsjaj.'),
             ('Filter za plavo svetlo', 'Stakla sa filterom za plavi deo svetla, na primer sa ekrana telefona i računara.'),
             ('Progresivna stakla', 'Jedno staklo za gledanje i na daljinu i na blizinu, sa postepenim prelazom jačine.'),
             ('Fotosenzitivna stakla', 'Stakla koja na suncu potamne, a u zatvorenom ponovo postanu svetla.'),
@@ -614,7 +614,7 @@ def build_usluge():
     <div class="container services-inner">
       <ul class="svc-list">{rows}
       </ul>
-      <p class="svc-note">Antirefleks gratis uz određene okvire.<br>Plaćanje gotovinom, karticama, čekovima i na rate.</p>
+      <p class="svc-note">Plaćanje gotovinom, karticama, čekovima i na rate.</p>
     </div>
   </section>
 '''
