@@ -141,63 +141,47 @@
 
 <main id="sadrzaj">
 
-  <!-- ============ HERO ============
-       Pozadina je zamućena kao kod -5,00 dioptrije i izoštrava se na skrol (20 koraka po 0,25).
-       data-effect="8": tablica za vid (izabrano).  data-effect="1": fotografija radnje; tada vratiti fetchpriority="high" i ukloniti loading="lazy" sa #hero-photo.
-       Nivoi zamućenja se prave skriptom tools/hero-zamucenje.py. -->
-  <section class="hero" id="hero" data-effect="8" aria-labelledby="hero-title">
-    <div class="hero-bg" aria-hidden="true">
-      <picture class="hero-photo">
-        <source media="(orientation: portrait)" srcset="images/hero/hero-p-20.webp">
-        <img id="hero-photo" src="images/hero/hero-d-20.webp" alt="" width="1920" height="1200" loading="lazy" decoding="async">
-      </picture>
-      <div class="hero-chart">
-        <div class="chart-layer chart-layer--a"><span style="--s:1">E</span><span style="--s:.68">F P</span><span style="--s:.5">T O Z</span><span style="--s:.38">L P E D</span>
-        <span style="--s:.3">P E C F D</span><span style="--s:.24">E D F C Z P</span><span style="--s:.19">F E L O P Z D</span><span style="--s:.155">D E F P O T E C</span></div>
-        <div class="chart-layer chart-layer--b"><span style="--s:1">E</span><span style="--s:.68">F P</span><span style="--s:.5">T O Z</span><span style="--s:.38">L P E D</span>
-        <span style="--s:.3">P E C F D</span><span style="--s:.24">E D F C Z P</span><span style="--s:.19">F E L O P Z D</span><span style="--s:.155">D E F P O T E C</span></div>
-        <div class="chart-layer chart-layer--c"><span style="--s:1">E</span><span style="--s:.68">F P</span><span style="--s:.5">T O Z</span><span style="--s:.38">L P E D</span>
-        <span style="--s:.3">P E C F D</span><span style="--s:.24">E D F C Z P</span><span style="--s:.19">F E L O P Z D</span><span style="--s:.155">D E F P O T E C</span></div>
-      </div>
-      <div class="hero-wash"></div>
+  <!-- ============ PRVI EKRAN ============
+       Dva glavna dugmeta (Ramovi, Futrole), naslov, poziv, a dole lokacija i radno vreme.
+       Prelaz "Fokus": dok se skroluje, prvi ekran se zamuti kao kroz pogrešnu dioptriju, a ponuda ispod se izoštri (main.js). -->
+  <section class="nh" id="pocetna" aria-labelledby="pocetna-naslov">
+    <div class="nh-bg" aria-hidden="true">
+      <div class="nh-chart"><span style="--s:1">E</span><span style="--s:.68">F P</span><span style="--s:.5">T O Z</span><span style="--s:.38">L P E D</span><span style="--s:.3">P E C F D</span><span style="--s:.24">E D F C Z P</span><span style="--s:.19">F E L O P Z D</span><span style="--s:.155">D E F P O T E C</span></div>
     </div>
 
-    <div class="container hero-inner">
-      <div class="dpt" aria-hidden="true">
-        <span class="dpt-label">Dioptrija</span>
-        <div class="dpt-scale"><i class="dpt-marker"></i></div>
-        <div class="dpt-ticks"><span>−5</span><span>−4</span><span>−3</span><span>−2</span><span>−1</span><span>0</span></div>
-        <span class="dpt-val" id="dpt-val">−5,00</span>
-      </div>
+    <div class="nh-in">
+      <nav class="nh-picks" aria-label="Najčešće">
+        <a class="nh-pick nh-pick--ramovi" href="okviri/">
+          <span class="nh-label">Ramovi</span>
+          <span class="nh-sub">Pogledajte<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></span>
+          <span class="nh-img"><img src="images/pocetna/dugme-ramovi-480.webp" srcset="images/pocetna/dugme-ramovi-480.webp 480w, images/pocetna/dugme-ramovi-960.webp 960w" sizes="(min-width: 900px) 280px, 36vw" alt="" width="480" height="174" decoding="async"></span>
+        </a>
+        <a class="nh-pick nh-pick--futrole" href="futrole/">
+          <span class="nh-label">Futrole</span>
+          <span class="nh-sub">Pogledajte<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></span>
+          <span class="nh-img"><img src="images/pocetna/dugme-mace-480.webp" srcset="images/pocetna/dugme-mace-480.webp 480w, images/pocetna/dugme-mace-960.webp 960w" sizes="(min-width: 900px) 180px, 26vw" alt="" width="480" height="393" decoding="async"></span>
+        </a>
+      </nav>
 
-      <div class="hero-main">
-        <h1 class="hero-title" id="hero-title">
-          <span class="ht ht-1" data-fit><b>Naočare</b> i</span>
-          <span class="ht-pair"><span class="ht ht-2" data-fit>provera</span> <span class="ht ht-3" data-fit><b>dioptrije</b></span></span>
-        </h1>
-        <p class="hero-desc">Precizna provera dioptrije i opušteno biranje raznih vrsta ramova i stakala.</p>
-        <div class="hero-actions">
-          <a href="okviri/" class="btn btn-glass">Pogledaj naočare</a>
-          <a href="tel:+381603175264" class="btn btn-line hero-call-inline">Pozovite 060 3175264</a>
-        </div>
-      </div>
+      <h1 class="nh-hl" id="pocetna-naslov"><span class="nh-big"><b>Naočare</b></span><span class="nh-i">i</span><span class="nh-mid"><b>provera dioptrije</b></span></h1>
+      <a class="nh-call" href="tel:+381603175264"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>Pozovite 060 3175264</a>
+      <p class="nh-small">Precizna provera dioptrije i opušteno biranje raznih vrsta ramova i stakala.</p>
+    </div>
 
-      <div class="hero-foot">
-        <div class="hero-loc">
-          <p class="hero-place">Na Voždovcu</p>
-          <p class="hero-addr">Braće Srnić 23a, TC Medaković 3</p>
-        </div>
-        <div class="hero-hours">
-          <p><b>Radno vreme</b></p>
-          <p>Ponedeljak do petak 10 do 18 h</p>
-          <p>Subota 9 do 14 h</p>
-        </div>
-        <a href="tel:+381603175264" class="btn btn-line hero-call">Pozovite 060 3175264</a>
+    <div class="container nh-foot">
+      <div class="nh-loc">
+        <p class="nh-place"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><path d="M12 12.2a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2z"/></svg>Na Voždovcu</p>
+        <p><span>Braće Srnić 23a,</span> <span>TC Medaković 3</span></p>
+      </div>
+      <button class="nh-go" id="pocetna-dalje" type="button">Pogledajte ponudu<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 9 7 7 7-7"/></svg></button>
+      <div class="nh-vreme">
+        <p id="pocetna-rd"><span>Ponedeljak do petak</span> <span>10 do 18 h</span></p>
+        <p id="pocetna-sb"><span>Subota</span> <span>9 do 14 h</span></p>
       </div>
     </div>
   </section>
 
-  <!-- Sve posle hero sekcije klizi preko nje -->
+  <!-- Sve posle prvog ekrana; prvi deo (zid sa okvirima) se izoštrava dok se skroluje -->
   <div class="cover">
 
   <!-- ============ ZID SA OKVIRIMA ============ -->

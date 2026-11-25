@@ -1,6 +1,6 @@
 /* ============================================
    OPTIKA VISAGE, main.js
-   Meni, tablica za vid (dioptrija), reveal, godina
+   Meni, prvi ekran početne, reveal, godina
    ============================================ */
 
 (function () {
@@ -57,100 +57,42 @@
     });
   }
 
-  // ---------- Hero: dioptrija pada od -5,00 do 0,00 dok se skroluje ----------
-  // Prvih 40% visine ekrana skrola (isto kao margin-top na .cover u CSS-u) je 20 koraka po 0,25.
-  // STEPS mora da se slaže sa brojem slika iz tools/hero-zamucenje.py.
-  // Pozadina se ne zamućuje uživo: menjaju se unapred zamućene slike, pa je efekat lagan i na telefonu.
-  var hero = document.getElementById('hero');
-  if (hero) {
-    var STEPS = 20;
-    var dptVal = document.getElementById('dpt-val');
-    var lastStep = -1;
+  // ---------- Početna: prvi ekran i prelaz "Fokus" ----------
+  // Dok se skroluje, prvi ekran se zamuti i blago udalji (kao kroz pogrešnu dioptriju),
+  // a zid sa okvirima ispod se izoštri. Ko je isključio animacije, dobija običan skrol.
+  var nh = document.getElementById('pocetna');
+  if (nh) {
+    try {
+      var danNh = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Belgrade', weekday: 'short' }).format(new Date());
+      if (['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].indexOf(danNh) > -1) document.getElementById('pocetna-rd').className = 'nh-danas';
+      if (danNh === 'Sat') document.getElementById('pocetna-sb').className = 'nh-danas';
+    } catch (e) {}
 
-    var heroSrc = function (tag, step) {
-      return 'images/hero/hero-' + tag + '-' + (step < 10 ? '0' : '') + step + '.webp';
-    };
-    // Dva sloja slike: nova slika se učita i dekodira u sloju koji se ne vidi,
-    // pa tek onda pređe preko stare. Tako nema praznog kadra (treperenja) pri promeni.
-    var bg = hero.querySelector('.hero-bg');
-    var wash = hero.querySelector('.hero-wash');
-    var layers = [0, 1].map(function () {
-      var im = document.createElement('img');
-      im.className = 'hero-layer'; im.alt = ''; im.decoding = 'async';
-      bg.insertBefore(im, wash);
-      return im;
+    var nhCover = document.querySelector('.nh ~ .cover');
+    var nhNext = nhCover && nhCover.firstElementChild;
+    document.getElementById('pocetna-dalje').addEventListener('click', function () {
+      if (!nhCover) return;
+      window.scrollTo({ top: nhCover.offsetTop, behavior: reduceMotion ? 'auto' : 'smooth' });
     });
-    var front = -1;
-    var swapId = 0;
-    var orient = function () { return window.matchMedia('(orientation: portrait)').matches ? 'p' : 'd'; };
-    var showPhoto = function (step) {
-      var id = ++swapId;
-      var next = front === 0 ? 1 : 0;
-      var im = layers[next];
-      var reveal = function () {
-        if (id !== swapId) return;                 // u međuvremenu je tražen drugi korak
-        im.style.zIndex = '2';
-        if (front >= 0) layers[front].style.zIndex = '1';
-        im.classList.add('is-on');
-        var prev = front;
-        front = next;
-        if (prev >= 0) setTimeout(function () {
-          if (front !== prev) layers[prev].classList.remove('is-on');
-        }, 160);
-      };
-      im.src = heroSrc(orient(), step);
-      if (im.decode) im.decode().then(reveal, reveal); else im.onload = reveal;
-    };
-    var MAX_D = STEPS * 0.25;
-    var chartStyle = hero.style;
-    // vrednost dioptrije se menja glatko; brojač i fotografije prate korake po 0,25
-    var applyD = function (d) {
-      chartStyle.setProperty('--d', d.toFixed(3));
-      // pretapanje tri sloja tablice: oštar (a), blago zamućen (b), jako zamućen (c)
-      var wa, wb, wc;
-      if (d <= 2) { wa = 1 - d / 2; wb = d / 2; wc = 0; }
-      else { wa = 0; wb = 1 - (d - 2) / (MAX_D - 2); wc = (d - 2) / (MAX_D - 2); }
-      chartStyle.setProperty('--wa', wa.toFixed(3));
-      chartStyle.setProperty('--wb', wb.toFixed(3));
-      chartStyle.setProperty('--wc', wc.toFixed(3));
-      var step = Math.round(d * 4);
-      if (step === lastStep) return;
-      lastStep = step;
-      dptVal.textContent = step === 0 ? '0,00' : '−' + (step / 4).toFixed(2).replace('.', ',');
-      if (hero.dataset.effect !== '8') showPhoto(step);
-    };
 
-    if (reduceMotion) {
-      applyD(0);
-    } else {
-      var targetD = MAX_D, curD = MAX_D, running = false;
-      var readTarget = function () {
-        var dist = hero.offsetHeight * 0.4;
-        var p = dist > 0 ? Math.min(1, Math.max(0, window.scrollY / dist)) : 1;
-        targetD = (1 - p) * MAX_D;
+    if (!reduceMotion && nhNext) {
+      var nhClamp = function (x, lo, hi) { return Math.min(hi, Math.max(lo, x)); };
+      var nhTicking = false;
+      var nhUpdate = function () {
+        nhTicking = false;
+        var k = nhClamp(window.scrollY / window.innerHeight, 0, 1);
+        var blur = k * 14, op = nhClamp(1 - k * 1.45, 0, 1);
+        nh.style.filter = blur > .2 ? 'blur(' + blur.toFixed(1) + 'px)' : '';
+        nh.style.transform = k > 0 ? 'scale(' + (1 - k * .05).toFixed(4) + ')' : '';
+        nh.style.opacity = op.toFixed(3);
+        nh.style.visibility = op <= 0 ? 'hidden' : '';
+        var g = (1 - nhClamp(k * 1.25, 0, 1)) * 14;
+        nhNext.style.filter = g > .2 ? 'blur(' + g.toFixed(1) + 'px)' : '';
+        nhNext.style.opacity = nhClamp(.15 + k * 1.3, 0, 1).toFixed(3);
       };
-      var tick = function () {
-        var diff = targetD - curD;
-        curD = Math.abs(diff) < 0.003 ? targetD : curD + diff * 0.22;
-        applyD(curD);
-        if (curD !== targetD) requestAnimationFrame(tick); else running = false;
-      };
-      var onScroll = function () {
-        readTarget();
-        if (!running) { running = true; requestAnimationFrame(tick); }
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll);
-      readTarget(); curD = targetD; applyD(curD);
-
-      // učitaj ostale nivoe zamućenja u pozadini, samo za trenutnu orijentaciju ekrana
-      var preload = function () {
-        if (hero.dataset.effect === '8') return; // tablica za vid ne koristi fotografije
-        var tag = window.matchMedia('(orientation: portrait)').matches ? 'p' : 'd';
-        for (var i = STEPS - 1; i >= 0; i--) { var im = new Image(); im.decoding = 'async'; im.src = heroSrc(tag, i); }
-      };
-      if ('requestIdleCallback' in window) requestIdleCallback(preload, { timeout: 2000 });
-      else window.addEventListener('load', preload);
+      window.addEventListener('scroll', function () { if (!nhTicking) { nhTicking = true; requestAnimationFrame(nhUpdate); } }, { passive: true });
+      window.addEventListener('resize', nhUpdate);
+      nhUpdate();
     }
   }
 
