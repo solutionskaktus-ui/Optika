@@ -1,0 +1,151 @@
+{
+  "modeli": [
+    {
+      "slug": "nera", "ime": "Nera", "opis": "Smotava se i zatvara lastišem.",
+      "futrole": [
+        {"boja": "svetloplava", "sifra": "Nera 127", "foto": [["JOC_2754", "iz ugla"], ["JOC_2753", "spreda"]]},
+        {"boja": "biserno roze", "sifra": "Nera 128", "foto": [["JOC_2766", "iz ugla"], ["JOC_2765", "spreda"]]},
+        {"boja": "crvena", "sifra": "Nera 102", "foto": [["JOC_2783", "iz ugla"], ["JOC_2782", "spreda"]]},
+        {"boja": "narandžasta", "sifra": "Nera 103", "foto": [["JOC_2768", "iz ugla"], ["JOC_2767", "spreda"]]},
+        {"boja": "braon", "sifra": "Nera 106", "foto": [["JOC_2770", "iz ugla"]]},
+        {"boja": "maslinasta", "sifra": "Nera 114", "foto": [["JOC_2772", "iz ugla"], ["JOC_2771", "spreda"]]},
+        {"boja": "senf", "sifra": "Nera 130", "foto": [["JOC_2793", "iz ugla"], ["JOC_2792", "spreda"]]},
+        {"boja": "ljubičasta", "sifra": "Nera 129", "foto": [["JOC_2795", "iz ugla"], ["JOC_2794", "spreda"]]},
+        {"boja": "siva", "sifra": "Nera 125", "foto": [["JOC_2789", "iz ugla"], ["JOC_2788", "spreda"]]},
+        {"boja": "crna", "sifra": "Nera 101", "foto": [["JOC_2772-2", "iz ugla"], ["JOC_2771-2", "spreda"]]}
+      ]
+    },
+    {
+      "slug": "hroma", "ime": "Hroma", "opis": "Smotava se i zatvara lastišem.",
+      "futrole": [
+        {"boja": "braon", "sifra": "Hroma 106", "foto": [["JOC_2769", "spreda"]]},
+        {"boja": "puder roze", "sifra": "Hroma 107", "foto": [["JOC_2773", "spreda"], ["JOC_2774", "iz ugla"]]},
+        {"boja": "bež", "sifra": "Hroma 132", "foto": [["JOC_2777", "spreda"], ["JOC_2778", "iz ugla"], ["JOC_2761", "otvorena"]]}
+      ]
+    },
+    {
+      "slug": "rolo", "ime": "Rolo", "opis": "Smotava se i zakopčava jezičkom.",
+      "futrole": [
+        {"boja": "maslinasta", "sifra": "Rolo 109 P-K", "foto": [["JOC_1324", "iz ugla"], ["JOC_1322", "spreda"], ["JOC_1327", "otvorena"]]},
+        {"boja": "koral", "sifra": "Rolo 107", "foto": [["JOC_1329", "iz ugla"], ["JOC_1328", "spreda"]]},
+        {"boja": "crvena", "sifra": "Rolo 102", "foto": [["JOC_2723", "iz ugla"], ["JOC_2721", "spreda"], ["JOC_2728", "otvorena"]]},
+        {"boja": "braon", "sifra": "Rolo 106", "foto": [["JOC_2703", "iz ugla"], ["JOC_2705", "spreda"], ["JOC_2799", "otvorena"]]},
+        {"boja": "crna", "sifra": "Rolo 101", "foto": [["JOC_2726", "iz ugla"], ["JOC_2725", "spreda"], ["JOC_2727", "otvorena"]]},
+        {"boja": "zelena", "sifra": "Rolo 104", "foto": [["JOC_2785", "iz ugla"], ["JOC_2784", "spreda"], ["JOC_2786", "otvorena"]]}
+      ]
+    },
+    {
+      "slug": "popy", "ime": "Popy", "opis": "Prošivena futrola koja se zateže vezicom.",
+      "futrole": [
+        {"boja": "maslinasta", "sifra": "Popy 114", "foto": [["JOC_2863", "spreda"], ["JOC_2864", "iz ugla"], ["JOC_2867", "sa naočarima"]]},
+        {"boja": "pink", "sifra": "Popy 112", "foto": [["JOC_2868", "spreda"], ["JOC_2869", "iz ugla"], ["JOC_2866", "sa naočarima"]]},
+        {"boja": "crna", "sifra": "Popy 100L", "foto": [["JOC_2873", "spreda"], ["JOC_2874", "iz ugla"], ["JOC_2872", "sa naočarima"]]},
+        {"boja": "žuta", "sifra": "Popy 110", "foto": [["JOC_2879", "spreda"], ["JOC_2880", "iz ugla"], ["JOC_2878", "sa naočarima"]]},
+        {"boja": "plava", "sifra": "Popy 111", "foto": [["JOC_2876", "spreda"], ["JOC_2877", "iz ugla"], ["JOC_2875", "sa naočarima"]]},
+        {"boja": "bordo", "sifra": "Popy 113", "foto": [["JOC_2883", "spreda"], ["JOC_2881", "iz ugla"], ["JOC_2884", "sa naočarima"]]}
+      ]
+    },
+    {
+      "slug": "golf", "ime": "Golf", "opis": "Zaobljena futrola sa rajsferšlusom.",
+      "futrole": [
+        {"boja": "teget", "sifra": "Golf 105", "foto": [["JOC_2810", "iz ugla"], ["JOC_2809", "spreda"]]},
+        {"boja": "narandžasta", "sifra": "Golf 103", "foto": [["JOC_2815", "iz ugla"], ["JOC_2812", "spreda"]]},
+        {"boja": "zelena", "sifra": "Golf 104", "foto": [["JOC_2819", "iz ugla"], ["JOC_2817", "spreda"]]},
+        {"boja": "puder roze", "sifra": "Golf 107", "foto": [["JOC_2823", "iz ugla"], ["JOC_2822", "spreda"]]},
+        {"boja": "braon", "sifra": "Golf 106", "foto": [["JOC_2827", "iz ugla"], ["JOC_2824", "spreda"]]},
+        {"boja": "crna", "sifra": "Golf 101", "foto": [["JOC_2699", "iz ugla"], ["JOC_2696", "spreda"]]},
+        {"boja": "crvena", "sifra": "Golf 102", "foto": [["JOC_2853", "iz ugla"], ["JOC_2852", "spreda"]]}
+      ]
+    },
+    {
+      "slug": "tenis", "ime": "Tenis", "opis": "Futrola sa rajsferšlusom.",
+      "futrole": [
+        {"boja": "narandžasta", "sifra": "Tenis 103", "foto": [["JOC_2839", "spreda"], ["JOC_2847", "iz ugla"], ["JOC_2844", "sa naočarima"]]},
+        {"boja": "teget", "sifra": "Tenis 108", "foto": [["JOC_2843", "spreda"], ["JOC_2834", "iz ugla"], ["JOC_2833", "sa naočarima"]]},
+        {"boja": "crvena", "sifra": "Tenis 102", "foto": [["JOC_2840", "spreda"], ["JOC_2838", "iz ugla"], ["JOC_2837", "sa naočarima"]]},
+        {"boja": "braon", "sifra": "Tenis 106", "foto": [["JOC_2856", "spreda"], ["JOC_2857", "iz ugla"], ["JOC_2855", "sa naočarima"]]},
+        {"boja": "zelena", "sifra": "Tenis 104", "foto": [["JOC_2858", "spreda"], ["JOC_2859", "iz ugla"], ["JOC_2860", "sa naočarima"]]},
+        {"boja": "crna", "sifra": "Tenis 101", "foto": [["JOC_2848", "spreda"], ["JOC_2851", "iz ugla"], ["JOC_2850", "sa naočarima"]]}
+      ]
+    },
+    {
+      "slug": "tara", "ime": "Tara", "opis": "Futrola sa rajsferšlusom.",
+      "futrole": [
+        {"boja": "maslinasta", "sifra": "Tara 114", "foto": [["JOC_1354", "iz ugla"], ["JOC_1353", "spreda"], ["JOC_1357", "sa naočarima"]]},
+        {"boja": "bordo", "sifra": "Tara 126", "foto": [["JOC_1359", "iz ugla"], ["JOC_1358", "spreda"], ["JOC_1361", "sa naočarima"]]},
+        {"boja": "srebrna", "sifra": "Tara 121", "foto": [["JOC_1363", "iz ugla"], ["JOC_1362", "spreda"], ["JOC_1365", "sa naočarima"]]},
+        {"boja": "siva", "sifra": "Tara 125", "foto": [["JOC_2732", "iz ugla"], ["JOC_2729", "spreda"], ["JOC_2733", "sa naočarima"]]}
+      ]
+    },
+    {
+      "slug": "mirror", "ime": "Mirror", "opis": "Sjajna futrola sa rajsferšlusom i crtežom naočara.",
+      "futrole": [
+        {"boja": "srebrna", "sifra": "Mirror 115", "foto": [["4", "iz ugla"]]},
+        {"boja": "ciklama", "sifra": "Mirror 118", "foto": [["JOC_1345", "iz ugla"], ["1", "spreda"]]},
+        {"boja": "plava", "sifra": "Mirror 119", "foto": [["JOC_1376", "iz ugla"], ["2", "spreda"]]},
+        {"boja": "tamnosiva", "sifra": "Mirror 116", "foto": [["JOC_1378", "iz ugla"], ["3", "spreda"]]},
+        {"boja": "šampanj", "sifra": "Mirror 120", "foto": [["5", "iz ugla"]]},
+        {"boja": "roze", "sifra": "Mirror 117", "foto": [["6", "iz ugla"]]}
+      ]
+    },
+    {
+      "slug": "stras", "ime": "Štras", "opis": "Futrola sa rajsferšlusom, sa šljokicama.",
+      "futrole": [
+        {"boja": "bela", "sifra": "Štras 100", "foto": [["JOC_1338", "iz ugla"], ["JOC_1336", "spreda"], ["JOC_1394", "otvorena, sa naočarima"]]},
+        {"boja": "srebrna", "sifra": "Štras 121", "foto": [["JOC_1343", "iz ugla"], ["JOC_1342", "spreda"], ["JOC_1392", "otvorena, sa naočarima"]]},
+        {"boja": "zlatna", "sifra": "Štras 122", "foto": [["JOC_1367", "iz ugla"], ["JOC_1366", "spreda"], ["JOC_1391", "otvorena, sa naočarima"]]},
+        {"boja": "teget", "sifra": "Štras 119", "foto": [["JOC_1369", "iz ugla"], ["JOC_1368", "spreda"], ["JOC_1390", "otvorena, sa naočarima"]]},
+        {"boja": "crna", "sifra": "Štras 101", "foto": [["JOC_1372", "iz ugla"], ["JOC_1370", "spreda"], ["JOC_1389", "otvorena, sa naočarima"]]},
+        {"boja": "bronzana", "sifra": "Štras 123", "foto": [["JOC_1374", "iz ugla"], ["JOC_1373", "spreda"], ["JOC_1388", "otvorena, sa naočarima"]]},
+        {"boja": "šampanj", "sifra": "Štras 120", "foto": [["JOC_2718", "iz ugla"], ["JOC_2715", "spreda"], ["JOC_2800", "otvorena, sa naočarima"]]}
+      ]
+    },
+    {
+      "slug": "pop-art", "ime": "Pop Art", "opis": "Futrola sa rajsferšlusom i šarenim crtežom.",
+      "futrole": [
+        {"boja": "mace", "sifra": "Pop Art Mace", "foto": [["JOC_1306", "iz ugla"], ["JOC_1304", "spreda"], ["JOC_1402", "otvorena, sa naočarima"]]},
+        {"boja": "devojke", "sifra": "Pop Art Devojke", "foto": [["JOC_1308", "iz ugla"], ["JOC_1307", "spreda"], ["JOC_1397", "otvorena, sa naočarima"]]},
+        {"boja": "Pariz", "sifra": "Pop Art Paris", "foto": [["JOC_1321", "iz ugla"], ["JOC_1320", "spreda"], ["JOC_1400", "otvorena, sa naočarima"]]},
+        {"boja": "crtani likovi", "sifra": "Pop Art Crazy", "foto": [["JOC_1311", "iz ugla"], ["JOC_1309", "spreda"], ["JOC_1401", "otvorena, sa naočarima"]]}
+      ]
+    },
+    {
+      "slug": "zmija", "ime": "Zmija", "opis": "Futrola sa rajsferšlusom i šarom zmijske kože.",
+      "futrole": [
+        {"boja": "siva", "sifra": "Zmija 101", "foto": [["JOC_1317", "iz ugla"], ["JOC_1316", "spreda"], ["JOC_1403", "otvorena, sa naočarima"]]},
+        {"boja": "braon", "sifra": "Zmija 106", "foto": [["JOC_1315", "iz ugla"], ["JOC_1314", "spreda"], ["JOC_1398", "otvorena, sa naočarima"]]}
+      ]
+    },
+    {
+      "slug": "leopard", "ime": "Leopard", "opis": "Futrola sa rajsferšlusom i leopard šarom.",
+      "futrole": [
+        {"boja": "siva", "sifra": "Leopard 101", "foto": [["JOC_1313", "iz ugla"], ["JOC_1312", "spreda"], ["JOC_1399", "otvorena, sa naočarima"]]},
+        {"boja": "braon", "sifra": "Leopard 106", "foto": [["JOC_1319", "iz ugla"], ["JOC_1318", "spreda"], ["JOC_1404", "otvorena, sa naočarima"]]}
+      ]
+    },
+    {
+      "slug": "krokodil", "ime": "Krokodil", "opis": "Futrola sa rajsferšlusom i utisnutom šarom krokodilske kože.",
+      "futrole": [
+        {"boja": "maslinasta", "sifra": "Krokodil 114", "foto": [["JOC_1333", "iz ugla"], ["JOC_1332", "spreda"], ["JOC_1395", "otvorena, sa naočarima"]]},
+        {"boja": "teget", "sifra": "Krokodil 108", "foto": [["JOC_1349", "iz ugla"], ["JOC_1348", "spreda"], ["JOC_1393", "otvorena, sa naočarima"]]},
+        {"boja": "tamnosiva", "sifra": "Krokodil 124", "foto": [["JOC_2746", "iz ugla"], ["JOC_2745", "spreda"], ["JOC_2801", "otvorena, sa naočarima"]]}
+      ]
+    },
+    {
+      "slug": "hologram", "ime": "Hologram", "opis": "Futrola sa rajsferšlusom i crtežom naočara.",
+      "futrole": [
+        {"boja": "crna", "sifra": "Hologram 101A", "foto": [["JOC_1352", "iz ugla"], ["JOC_1351", "spreda"]]},
+        {"boja": "teget", "sifra": "Hologram 108B", "foto": [["JOC_1347", "iz ugla"], ["JOC_1346", "spreda"]]},
+        {"boja": "maslinasta", "sifra": "Hologram 114A", "foto": [["JOC_1335", "iz ugla"], ["JOC_1334", "spreda"]]}
+      ]
+    },
+    {
+      "slug": "kamuflaz", "ime": "Kamuflaž", "opis": "Futrola sa rajsferšlusom, kamuflažnom šarom i crtežom naočara.",
+      "futrole": [
+        {"boja": "krem", "sifra": "Kamuflaž 110", "foto": [["JOC_1300", "iz ugla"], ["JOC_1297", "spreda"]]},
+        {"boja": "crna", "sifra": "Kamuflaž 101", "foto": [["JOC_1340", "iz ugla"], ["JOC_1339", "spreda"]]},
+        {"boja": "teget", "sifra": "Kamuflaž 108", "foto": [["JOC_2736", "iz ugla"], ["JOC_2734", "spreda"]]}
+      ]
+    }
+  ]
+}

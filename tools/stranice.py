@@ -292,6 +292,87 @@ LIGHTBOX = f'''
 '''
 
 
+FUTROLE = json.loads((ROOT / 'data' / 'futrole.json').read_text(encoding='utf-8'))['modeli']
+# fotografije futrola imaju belu pozadinu; u prozoru se stapaju sa podlogom (vidi .lb--fut u CSS-u).
+# Šifre iz kataloga su u data/futrole.json i za sada se ne prikazuju; trebaće prodavnici.
+LIGHTBOX_FUTROLE = LIGHTBOX.replace('<dialog class="lb"', '<dialog class="lb lb--fut"')
+
+
+def broj_futrola(n):
+    if n % 10 == 1 and n % 100 != 11:
+        return f'{n} futrola'
+    if 2 <= n % 10 <= 4 and not 12 <= n % 100 <= 14:
+        return f'{n} futrole'
+    return f'{n} futrola'
+
+
+def fut_slug(s):
+    s = s.lower().replace('đ', 'dj')
+    for a, b in (('č', 'c'), ('ć', 'c'), ('š', 's'), ('ž', 'z')):
+        s = s.replace(a, b)
+    return '-'.join(''.join(c if c.isalnum() else ' ' for c in s).split())
+
+
+def fut_model(m):
+    items = ''
+    for f in m['futrole']:
+        ime = f'{m["ime"]}, {f["boja"]}'
+        grp = f'fut-{m["slug"]}-{fut_slug(f["boja"])}'
+        data = f'data-lb="{grp}"'
+        extra = ''
+        for i, (_foto, pogled) in enumerate(f['foto'], 1):
+            b = f'/images/futrole/{m["slug"]}/{m["slug"]}-{fut_slug(f["boja"])}-{i}'
+            cap = escape(f'{ime}, {pogled}')
+            if i == 1:
+                first = (f'<a class="fut-item" href="{b}-1600.webp" {data} data-cap="{cap}">'
+                         f'<span class="fut-img"><img src="{b}-800.webp" srcset="{b}-800.webp 800w, {b}-1600.webp 1600w" '
+                         f'sizes="(max-width: 759px) 50vw, 300px" alt="{escape(ime)}" width="800" height="600" loading="lazy" decoding="async"></span>'
+                         f'<span class="fut-name">{escape(f["boja"][:1].upper() + f["boja"][1:])}</span></a>')
+            else:
+                extra += f'<a href="{b}-1600.webp" {data} data-cap="{cap}" hidden></a>'
+        items += f'\n          <li>{first}{extra}</li>'
+    return f'''
+    <article class="gal-model fut-model" id="{m["slug"]}" aria-labelledby="{m["slug"]}-ime">
+      <div class="container">
+        <h2 class="gal-name" id="{m["slug"]}-ime">{escape(m["ime"])}</h2>
+        <p class="gal-sub">{escape(m["opis"])}</p>
+        <ul class="fut-grid">{items}
+        </ul>
+        <p class="gal-ask"><a class="text-link" href="{VIBER}">Pitajte za ove futrole na Viberu</a></p>
+      </div>
+    </article>'''
+
+
+def build_futrole():
+    cr, cs = breadcrumbs([('Početna', '/'), ('Futrole', '/futrole/')])
+    n = sum(len(m['futrole']) for m in FUTROLE)
+    chips = ''.join(f'\n        <a href="#{m["slug"]}">{escape(m["ime"])}</a>' for m in FUTROLE)
+    models = '\n'.join(fut_model(m) for m in FUTROLE)
+    html = head('Futrole za naočare | Optika Visage, Voždovac',
+                'Futrole za naočare u Optici Visage na Medakoviću: Nera, Rolo, Golf, Tenis, Popy i još deset modela, '
+                'u mnogo boja. Pogledajte sve fotografije i pitajte nas na Viberu ili telefonom.',
+                '/futrole/', [cs])
+    html += nav('futrole') + '\n<main id="sadrzaj">\n'
+    html += page_head(cr, 'Futrole za naočare',
+                      f'{broj_futrola(n)} u {len(FUTROLE)} modela. Otvorite futrolu da vidite sve njene fotografije.')
+    html += f'''
+  <section class="gal fut" aria-label="Futrole">
+    <div class="container">
+      <nav class="fut-modeli" aria-label="Modeli futrola">{chips}
+      </nav>
+      <p class="katalog-note">Kad pitate za futrolu telefonom ili na Viberu, recite njen naziv, na primer Nera, ljubičasta.</p>
+    </div>
+    <div class="gal-list">
+{models}
+    </div>
+  </section>
+'''
+    html += cta_panel('Pitajte za futrolu',
+                      'Pozovite ili pišite na Viber i recite naziv futrole koja vam se dopada.')
+    html += '\n</main>\n' + LIGHTBOX_FUTROLE + FOOTER
+    return write('/futrole/', html)
+
+
 def gal_model(o):
     views = list(o.get('galerija', o['pogledi']))
     # velika fotografija spreda je poravnata kao na zidu, da svi okviri stoje u istoj ravni
@@ -918,7 +999,7 @@ def build_sitemap(paths):
 
 
 def main():
-    paths = [build_katalog()]
+    paths = [build_katalog(), build_futrole()]
     paths += [p for p in (build_model(o) for o in OKVIRI) if p]
     paths += build_usluge()
     paths += [build_o_nama(), build_kontakt(), build_pitanja()]
