@@ -258,6 +258,103 @@
     });
   }
 
+  // ---------- Futrole: sličice na kartici i prozor za jednu futrolu ----------
+  var fd = document.getElementById('fd');
+  var futEl = document.getElementById('fut-data');
+  if (fd && futEl && typeof fd.showModal === 'function') {
+    var FUT = JSON.parse(futEl.textContent);
+    var fdImg = fd.querySelector('.fd-img'), fdThumbs = fd.querySelector('.fd-thumbs'), fdColors = fd.querySelector('.fd-colors');
+    var fdPrev = fd.querySelector('.fd-prev'), fdNext = fd.querySelector('.fd-next');
+    var fdCur = null, fdIdx = 0, fdOpener = null, fdPushed = false;
+    var srcset = function (b) { return b + '-800.webp 800w, ' + b + '-1600.webp 1600w'; };
+    var esc = function (t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); };
+
+    // kartica: prelaz mišem preko sličice menja veliku fotografiju
+    document.querySelectorAll('.fut-item').forEach(function (card) {
+      var main = card.querySelector('.fut-main img'), f = FUT.futrole[card.getAttribute('data-fut')];
+      var mini = card.querySelectorAll('.fut-thumbs img');
+      if (!f || !main) return;
+      var pokazi = function (i) {
+        main.srcset = srcset(f.slike[i]); main.src = f.slike[i] + '-800.webp';
+        mini.forEach(function (m, j) { m.classList.toggle('is-on', j === i); });
+      };
+      if (mini.length) mini[0].classList.add('is-on');
+      mini.forEach(function (m, j) { m.addEventListener('mouseenter', function () { pokazi(j); }); });
+      card.addEventListener('mouseleave', function () { if (mini.length) pokazi(0); });
+      card.addEventListener('click', function (e) { e.preventDefault(); fdOpener = card; openFd(card.getAttribute('data-fut'), 'push'); });
+    });
+
+    var showFd = function (i) {
+      var f = FUT.futrole[fdCur], n = f.slike.length;
+      fdIdx = (i + n) % n;
+      var b = f.slike[fdIdx];
+      fdImg.srcset = srcset(b); fdImg.sizes = '(min-width: 900px) 600px, 100vw'; fdImg.src = b + '-1600.webp';
+      fdImg.alt = f.ime + ', ' + f.pogledi[fdIdx];
+      fdThumbs.querySelectorAll('button').forEach(function (t, j) { t.setAttribute('aria-current', j === fdIdx ? 'true' : 'false'); });
+      fdPrev.hidden = fdNext.hidden = n < 2;
+      if (n > 1) { [fdIdx + 1, fdIdx - 1].forEach(function (k) { var im = new Image(); im.src = f.slike[(k + n) % n] + '-1600.webp'; }); }
+    };
+
+    var openFd = function (id, hist) {
+      var f = FUT.futrole[id];
+      if (!f) return;
+      fdCur = id;
+      fd.querySelector('.fd-title').textContent = f.ime;
+      fd.querySelector('.fd-opis').textContent = f.opis;
+      fdThumbs.innerHTML = f.slike.length < 2 ? '' : f.slike.map(function (b, j) {
+        return '<button type="button" aria-label="' + esc(f.pogledi[j]) + '"><img src="' + b + '-240.webp" alt="" width="240" height="180"></button>';
+      }).join('');
+      fdThumbs.querySelectorAll('button').forEach(function (t, j) { t.addEventListener('click', function () { showFd(j); }); });
+      fdColors.innerHTML = FUT.modeli[f.model].map(function (cid) {
+        var c = FUT.futrole[cid];
+        return '<button type="button" data-id="' + cid + '" aria-current="' + (cid === id) + '"><img src="' + c.slike[0] + '-240.webp" alt="" width="240" height="180"><span>' + esc(c.boja) + '</span></button>';
+      }).join('');
+      fdColors.querySelectorAll('button').forEach(function (t) { t.addEventListener('click', function () { openFd(t.getAttribute('data-id'), 'replace'); }); });
+      showFd(0);
+      if (!fd.open) { document.documentElement.classList.add('fd-open'); fd.showModal(); }
+      fd.scrollTop = 0;
+      if (hist === 'push') {
+        // novi korak u istoriji, da dugme Nazad na telefonu zatvori prozor umesto da napusti stranu
+        var n0 = history.length;
+        history.pushState({ fd: id }, '', '#' + id);
+        fdPushed = history.length > n0;
+      } else if (hist === 'replace') history.replaceState(fdPushed ? { fd: id } : null, '', '#' + id);
+    };
+    var hideFd = function () {
+      if (fd.open) fd.close();
+      document.documentElement.classList.remove('fd-open');
+      if (FUT.futrole[location.hash.slice(1)]) history.replaceState(null, '', location.pathname + location.search);
+      fdCur = null; fdPushed = false;
+      if (fdOpener) fdOpener.focus({ preventScroll: true });
+    };
+    // zatvaranje: dugme Nazad na telefonu, Esc, dugme Zatvori i klik pored panela rade isto
+    var closeFd = function () { if (fdPushed && history.state && history.state.fd) history.back(); else hideFd(); };
+    window.addEventListener('popstate', function () {
+      var id = location.hash.slice(1);
+      fdPushed = !!(history.state && history.state.fd);
+      if (FUT.futrole[id]) openFd(id, 'none'); else if (fd.open) hideFd();
+    });
+    fd.querySelector('.fd-close').addEventListener('click', closeFd);
+    fd.addEventListener('cancel', function (e) { e.preventDefault(); closeFd(); });
+    fd.addEventListener('click', function (e) { if (e.target === fd) closeFd(); });
+    fdPrev.addEventListener('click', function () { showFd(fdIdx - 1); });
+    fdNext.addEventListener('click', function () { showFd(fdIdx + 1); });
+    fd.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); showFd(fdIdx - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); showFd(fdIdx + 1); }
+    });
+    var fx = null, fy = null, fdMain = fd.querySelector('.fd-main');
+    fdMain.addEventListener('touchstart', function (e) { fx = e.touches[0].clientX; fy = e.touches[0].clientY; }, { passive: true });
+    fdMain.addEventListener('touchend', function (e) {
+      if (fx === null) return;
+      var dx = e.changedTouches[0].clientX - fx, dy = e.changedTouches[0].clientY - fy;
+      fx = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) showFd(fdIdx + (dx < 0 ? 1 : -1));
+    });
+    // adresa sa nazivom futrole (#nera-ljubicasta) odmah otvara tu futrolu
+    if (FUT.futrole[location.hash.slice(1)]) openFd(location.hash.slice(1), 'replace');
+  }
+
   // ---------- Stranica modela: galerija ----------
   var gImg = document.querySelector('.gallery-img');
   if (gImg) {

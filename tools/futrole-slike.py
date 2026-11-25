@@ -5,7 +5,7 @@ Pokretanje:  python tools/futrole-slike.py <folder sa originalnim JPG fotografij
 Spisak futrola i fotografija je u data/futrole.json. Svaka fotografija se iseče oko
 futrole i stavi na belu podlogu 4:3, tako da futrola zauzima isti deo kadra:
 najviše 82 % širine i 64 % visine, na sredini. Izlaz:
-images/futrole/<model>/<model>-<boja>-<redni broj>-800.webp i -1600.webp
+images/futrole/<model>/<model>-<boja>-<redni broj>-800.webp, -1600.webp i sličica -240.webp
 """
 import json
 import sys
@@ -49,6 +49,11 @@ def obradi(src, out_base):
     out_base.parent.mkdir(parents=True, exist_ok=True)
     can.save(f'{out_base}-1600.webp', quality=80, method=6)
     can.resize((800, 600), Image.LANCZOS).save(f'{out_base}-800.webp', quality=80, method=6)
+    slicica(out_base)
+
+
+def slicica(out_base):
+    Image.open(f'{out_base}-800.webp').convert('RGB').resize((240, 180), Image.LANCZOS).save(f'{out_base}-240.webp', quality=78, method=6)
 
 
 def main():
@@ -60,6 +65,8 @@ def main():
             for i, (foto, _pogled) in enumerate(f['foto'], 1):
                 base = ROOT / 'images' / 'futrole' / m['slug'] / f'{m["slug"]}-{slug(f["boja"])}-{i}'
                 if Path(f'{base}-800.webp').exists() and '--sve' not in sys.argv:
+                    if not Path(f'{base}-240.webp').exists():
+                        slicica(base)
                     continue
                 obradi(src_dir / f'{foto}.jpg', base)
                 n += 1

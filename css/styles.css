@@ -465,15 +465,72 @@ p { color: var(--ink-soft); }
 .fut-modeli a:hover { color: var(--violet); box-shadow: inset 0 0 0 1.5px var(--violet); }
 .fut-model { scroll-margin-top: 64px; }
 .fut-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px 10px; }
-.fut-item { display: block; text-align: center; border-radius: var(--r-soft); cursor: zoom-in; }
-.fut-img { display: block; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--r-soft); background: #F3EDF5; }
-.fut-img img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform .45s var(--ease); }
-.fut-item:hover img { transform: scale(1.04); }
+.fut-item { display: block; text-align: center; border-radius: var(--r-soft); }
+.fut-img { display: flex; flex-direction: column; overflow: hidden; border-radius: var(--r-soft); background: #F3EDF5; }
+.fut-main { display: block; aspect-ratio: 4 / 3; }
+.fut-main img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform .45s var(--ease); }
+.fut-item:hover .fut-main img { transform: scale(1.04); }
 .fut-item:focus-visible { outline: 3px solid var(--violet); outline-offset: 3px; }
+/* sličice ispod velike fotografije: pokazuju da futrola ima više fotografija */
+.fut-thumbs { display: flex; justify-content: center; gap: 6px; padding: 0 8% 10px; margin-top: -6%; }
+.fut-thumbs img, .fut-prazno { flex: 0 0 24%; width: 24%; height: auto; aspect-ratio: 4 / 3; border-radius: 6px; background: var(--white); border: 1px solid var(--lilac-200); transition: border-color .2s var(--ease); }
+.fut-thumbs img.is-on { border-color: var(--violet); }
+.fut-prazno { visibility: hidden; }
 .fut-name { display: block; margin-top: 8px; font-size: 1rem; font-weight: 600; line-height: 1.3; }
 @media (min-width: 760px) {
   .fut-grid { grid-template-columns: repeat(4, 1fr); gap: 26px 16px; }
+  .fut-thumbs { gap: 8px; padding-bottom: 14px; }
   .fut-name { font-size: 1.0625rem; }
+}
+
+/* futrole: prozor za jednu futrolu. Na telefonu preko celog ekrana (galerija gore, dugmad zakačena dole),
+   na računaru panel na sredini (galerija levo, naziv, boje i dugmad desno). */
+html.fd-open { overflow: hidden; }
+.fd { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
+  background: var(--lilac-50); color: var(--ink); overflow-y: auto; overscroll-behavior: contain; }
+.fd::backdrop { background: rgba(91, 0, 112, .16); }
+.fd-panel { min-height: 100%; display: flex; flex-direction: column; }
+.fd-bar { position: sticky; top: 0; z-index: 3; display: flex; justify-content: flex-end; padding: 12px 16px; background: rgba(250, 247, 251, .94); }
+.fd-close { min-height: 44px; padding: 0 18px; }
+.fd-gal { padding: 0 16px; }
+.fd-main { position: relative; aspect-ratio: 4 / 3; border-radius: var(--r-soft); background: #F3EDF5; overflow: hidden; touch-action: pan-y; }
+.fd-img { display: block; width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+.fd-arrow { position: absolute; top: 50%; width: 44px; height: 44px; margin-top: -22px; display: grid; place-items: center; border-radius: 50%; background: var(--white); color: var(--violet); box-shadow: 0 0 0 1px var(--lilac-200), 0 8px 18px -10px rgba(60, 20, 72, .5); cursor: pointer; }
+.fd-prev { left: 10px; } .fd-next { right: 10px; }
+.fd-arrow[hidden] { display: none; }
+.fd-thumbs { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
+.fd-thumbs button { width: 76px; aspect-ratio: 4 / 3; padding: 0; border-radius: var(--r-btn); overflow: hidden; background: var(--white); box-shadow: inset 0 0 0 1px var(--lilac-200); cursor: pointer; }
+.fd-thumbs button[aria-current="true"] { box-shadow: inset 0 0 0 2px var(--violet); }
+.fd-thumbs img { display: block; width: 100%; height: 100%; object-fit: contain; padding: 2px; }
+.fd-info { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 22px 16px 0; }
+.fd-title { font-size: 1.625rem; font-weight: 700; letter-spacing: -.01em; line-height: 1.15; text-wrap: balance; }
+.fd-opis { margin-top: 6px; font-size: 1rem; color: var(--ink-soft); max-width: 40ch; }
+.fd-h { margin-top: 22px; font-size: 1rem; font-weight: 600; }
+.fd-colors { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 10px 8px; width: 100%; max-width: 460px; margin: 10px 0 24px; }
+.fd-colors button { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0; font-size: .875rem; line-height: 1.2; color: var(--ink); cursor: pointer; }
+.fd-colors img { display: block; width: 100%; aspect-ratio: 4 / 3; border-radius: var(--r-btn); background: #F3EDF5; mix-blend-mode: multiply; box-shadow: inset 0 0 0 1px transparent; }
+.fd-colors button span { padding: 0 2px; }
+.fd-colors button[aria-current="true"] img { outline: 2px solid var(--violet); outline-offset: 2px; }
+.fd-colors button[aria-current="true"] span { font-weight: 700; color: var(--violet); }
+/* mesto za porudžbinu: na telefonu zakačeno za dno ekrana */
+.fd-buy { position: sticky; bottom: 0; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: calc(100% + 32px); margin: auto -16px 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: rgba(250, 247, 251, .96); box-shadow: 0 -1px 0 var(--lilac-200); }
+.fd-buy .btn { min-height: 52px; padding: 0 12px; }
+.fd-broj { display: none; }
+@media (min-width: 900px) {
+  .fd { inset: 0; margin: auto; width: min(1100px, calc(100% - 64px)); height: fit-content; max-height: calc(100% - 64px); border-radius: var(--r-soft); box-shadow: 0 40px 90px -40px rgba(60, 20, 72, .55); }
+  .fd-panel { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 40px; align-items: center; padding: 32px 40px 36px; min-height: 0; }
+  .fd-bar { position: absolute; top: 16px; right: 16px; padding: 0; background: none; }
+  .fd-gal { padding: 0; }
+  .fd-arrow { width: 48px; height: 48px; margin-top: -24px; }
+  .fd-prev { left: 14px; } .fd-next { right: 14px; }
+  .fd-thumbs button { width: 92px; }
+  .fd-info { padding: 40px 0 0; }
+  .fd-title { font-size: 2rem; }
+  .fd-opis { font-size: 1.0625rem; }
+  .fd-colors { grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); margin-bottom: 0; }
+  .fd-buy { position: static; display: flex; flex-wrap: wrap; justify-content: center; width: auto; margin: 28px 0 0; padding: 0; background: none; box-shadow: none; }
+  .fd-buy .btn { padding: 0 24px; }
+  .fd-broj { display: inline; margin-left: .3em; }
 }
 
 /* fotografija preko celog ekrana */
@@ -491,8 +548,6 @@ html.lb-open { overflow: hidden; }
 .lb-btn { display: grid; place-items: center; width: 56px; height: 48px; border-radius: var(--r-btn); background: var(--white); color: var(--violet); box-shadow: inset 0 0 0 1.5px var(--lilac-200); cursor: pointer; transition: box-shadow .2s var(--ease); }
 .lb-btn:hover { box-shadow: inset 0 0 0 1.5px var(--violet); }
 .lb-btn[hidden] { display: none; }
-/* futrole: bela pozadina fotografije se stapa sa podlogom prozora */
-.lb--fut .lb-img { mix-blend-mode: multiply; }
 @media (min-width: 900px) {
   .lb-fig { padding: 0 96px; }
   .lb-nav { position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%); justify-content: space-between; padding: 0 24px; pointer-events: none; }

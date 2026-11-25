@@ -156,6 +156,7 @@ def nav(active):
     </a>
     <nav class="nav-menu" id="nav-menu" aria-label="Glavna navigacija">
 {link("/okviri/", "Okviri", "okviri")}
+{link("/futrole/", "Futrole", "futrole")}
 {link("/usluge/", "Usluge", "usluge")}
 {link("/o-nama/", "O nama", "o-nama")}
 {link("/kontakt/", "Kontakt", "kontakt")}
@@ -177,6 +178,7 @@ FOOTER = f'''
     </a>
     <nav class="footer-links" aria-label="Stranice">
       <a href="/okviri/">Okviri</a>
+      <a href="/futrole/">Futrole</a>
       <a href="/usluge/">Usluge</a>
       <a href="/o-nama/">O nama</a>
       <a href="/kontakt/">Kontakt</a>
@@ -293,9 +295,35 @@ LIGHTBOX = f'''
 
 
 FUTROLE = json.loads((ROOT / 'data' / 'futrole.json').read_text(encoding='utf-8'))['modeli']
-# fotografije futrola imaju belu pozadinu; u prozoru se stapaju sa podlogom (vidi .lb--fut u CSS-u).
 # Šifre iz kataloga su u data/futrole.json i za sada se ne prikazuju; trebaće prodavnici.
-LIGHTBOX_FUTROLE = LIGHTBOX.replace('<dialog class="lb"', '<dialog class="lb lb--fut"')
+FD_STRELICA = ('<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" '
+               'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{d}"/></svg>')
+# prozor za jednu futrolu: levo galerija, desno naziv, boje i mesto gde će kasnije biti porudžbina
+FUT_PROZOR = f'''
+<dialog class="fd" id="fd" aria-labelledby="fd-naslov">
+  <div class="fd-panel">
+    <div class="fd-bar"><button type="button" class="btn btn-line fd-close">Zatvori</button></div>
+    <div class="fd-gal">
+      <div class="fd-main">
+        <img class="fd-img" alt="" width="1600" height="1200">
+        <button type="button" class="fd-arrow fd-prev" aria-label="Prethodna fotografija">{FD_STRELICA.format(d="m15 5-7 7 7 7")}</button>
+        <button type="button" class="fd-arrow fd-next" aria-label="Sledeća fotografija">{FD_STRELICA.format(d="m9 5 7 7-7 7")}</button>
+      </div>
+      <div class="fd-thumbs" role="group" aria-label="Fotografije futrole"></div>
+    </div>
+    <div class="fd-info">
+      <h2 class="fd-title" id="fd-naslov"></h2>
+      <p class="fd-opis"></p>
+      <h3 class="fd-h">Boje</h3>
+      <div class="fd-colors" role="group" aria-label="Boje ovog modela"></div>
+      <div class="fd-buy">
+        <a class="btn btn-primary" href="{VIBER}">Pitajte na Viberu</a>
+        <a class="btn btn-line" href="tel:{TEL}">Pozovite<span class="fd-broj"> {TEL_TXT}</span></a>
+      </div>
+    </div>
+  </div>
+</dialog>
+'''
 
 
 def broj_futrola(n):
@@ -313,24 +341,28 @@ def fut_slug(s):
     return '-'.join(''.join(c if c.isalnum() else ' ' for c in s).split())
 
 
+def fut_id(m, f):
+    return f'{m["slug"]}-{fut_slug(f["boja"])}'
+
+
+def fut_base(m, f, i):
+    return f'/images/futrole/{m["slug"]}/{fut_id(m, f)}-{i}'
+
+
 def fut_model(m):
     items = ''
     for f in m['futrole']:
         ime = f'{m["ime"]}, {f["boja"]}'
-        grp = f'fut-{m["slug"]}-{fut_slug(f["boja"])}'
-        data = f'data-lb="{grp}"'
-        extra = ''
-        for i, (_foto, pogled) in enumerate(f['foto'], 1):
-            b = f'/images/futrole/{m["slug"]}/{m["slug"]}-{fut_slug(f["boja"])}-{i}'
-            cap = escape(f'{ime}, {pogled}')
-            if i == 1:
-                first = (f'<a class="fut-item" href="{b}-1600.webp" {data} data-cap="{cap}">'
-                         f'<span class="fut-img"><img src="{b}-800.webp" srcset="{b}-800.webp 800w, {b}-1600.webp 1600w" '
-                         f'sizes="(max-width: 759px) 50vw, 300px" alt="{escape(ime)}" width="800" height="600" loading="lazy" decoding="async"></span>'
-                         f'<span class="fut-name">{escape(f["boja"][:1].upper() + f["boja"][1:])}</span></a>')
-            else:
-                extra += f'<a href="{b}-1600.webp" {data} data-cap="{cap}" hidden></a>'
-        items += f'\n          <li>{first}{extra}</li>'
+        b1 = fut_base(m, f, 1)
+        n = len(f['foto'])
+        # sličice svih fotografija te futrole; jedna nevidljiva drži istu visinu kartice kad je fotografija samo jedna
+        thumbs = ''.join(f'<img src="{fut_base(m, f, i)}-240.webp" alt="" width="240" height="180" loading="lazy" decoding="async" data-i="{i - 1}">'
+                         for i in range(1, n + 1)) if n > 1 else '<i class="fut-prazno"></i>'
+        items += (f'\n          <li><a class="fut-item" href="#{fut_id(m, f)}" data-fut="{fut_id(m, f)}">'
+                  f'<span class="fut-img"><span class="fut-main"><img src="{b1}-800.webp" srcset="{b1}-800.webp 800w, {b1}-1600.webp 1600w" '
+                  f'sizes="(max-width: 759px) 50vw, 300px" alt="{escape(ime)}" width="800" height="600" loading="lazy" decoding="async"></span>'
+                  f'<span class="fut-thumbs" aria-hidden="true">{thumbs}</span></span>'
+                  f'<span class="fut-name">{escape(f["boja"][:1].upper() + f["boja"][1:])}</span></a></li>')
     return f'''
     <article class="gal-model fut-model" id="{m["slug"]}" aria-labelledby="{m["slug"]}-ime">
       <div class="container">
@@ -341,6 +373,22 @@ def fut_model(m):
         <p class="gal-ask"><a class="text-link" href="{VIBER}">Pitajte za ove futrole na Viberu</a></p>
       </div>
     </article>'''
+
+
+def fut_podaci():
+    """Podaci za prozor futrole (JavaScript ih čita sa stranice)."""
+    fut, modeli = {}, {}
+    for m in FUTROLE:
+        modeli[m['slug']] = [fut_id(m, f) for f in m['futrole']]
+        for f in m['futrole']:
+            fut[fut_id(m, f)] = {
+                'ime': f'{m["ime"]}, {f["boja"]}', 'boja': f['boja'][:1].upper() + f['boja'][1:],
+                'model': m['slug'], 'opis': m['opis'], 'sifra': f['sifra'],
+                'slike': [fut_base(m, f, i) for i in range(1, len(f['foto']) + 1)],
+                'pogledi': [p for _x, p in f['foto']],
+            }
+    j = json.dumps({'futrole': fut, 'modeli': modeli}, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
+    return f'<script type="application/json" id="fut-data">{j}</script>\n'
 
 
 def build_futrole():
@@ -369,7 +417,7 @@ def build_futrole():
 '''
     html += cta_panel('Pitajte za futrolu',
                       'Pozovite ili pišite na Viber i recite naziv futrole koja vam se dopada.')
-    html += '\n</main>\n' + LIGHTBOX_FUTROLE + FOOTER
+    html += '\n</main>\n' + FUT_PROZOR + fut_podaci() + FOOTER
     return write('/futrole/', html)
 
 
